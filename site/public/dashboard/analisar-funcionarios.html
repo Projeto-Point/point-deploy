@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Análise de funcionário | Point</title>
+        <link rel="stylesheet" href="css/styleDash.css" />
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    </head>
+    <body>
+        <header>
+            <nav id="menu">
+                <a href="maquinas.html" class="logo">
+                    <img src="../assets/imgs/Point.png">
+                </a>
+                <hr>
+                <a href="funcionarios.html" class="img-nav">
+                    <img src="../assets/imgs/user.png" >
+                    <span>Funcionários</span>
+                </a>
+                <a href="maquinas.html" class="img-nav">
+                    <img src="./assets/imgs/imac.png">
+                    <span>Máquinas</span>
+                </a>
+                <a href="instancias.html" class="img-nav">
+                    <img src="assets/dash/server.png">
+                    <span>Instâncias</span>
+                </a>
+                <a href="alertas.html" class="img-nav">
+                    <img src="assets/dash/alertas.png">
+                    <span>Alertas</span>
+                </a>
+                <a href="localizacao.html?filtroMapa=geral" class="img-nav">
+                    <img src="assets/imgs/pin.png">
+                    <span>Localização</span>
+                </a>
+                <a href="configuracoes.html" class="img-nav">
+                    <img src="./assets/imgs/setting.png">
+                    <span>Configurações</span>
+                </a>
+                <hr>
+                <a class="img-nav" id="sair">
+                    <img src="../assets/imgs/x.png" />
+                    <span>Sair</span>
+                </a>
+            </nav>
+            <nav id="menu-mobile"><img src="assets/dash/bars.svg"></nav>
+        </header>
+        <main>
+            <section class="top">
+                <div class="top-esq">
+                    <p class="titulo">Olá, <span id="nome_gerente"></span></p>
+                    <p class="subtitulo">17/10/2022</p>
+                </div>
+                <div class="top-meio">
+                    <select id="select-cidades">
+                        <!-- <option value="">BR - São Paulo</option> -->
+                    </select>
+                </div>
+            </section>
+            <section class="dashboard-analise-funcionario">
+                <div class="box box-kpi kpi-horas">
+                    <h3>Média de horas ativas por dia:</h3>
+                    <p id="kpiHoras"></p>
+                </div>
+                <div class="box box-kpi kpi-qtd-func">
+                    <h3>Quantidade de funcionários:</h3>
+                    <p id="kpiQtdFunc"></p>
+                </div>
+                <div class="grafico-movimentacao grafico box">
+                    <div class="header">
+                        <h3>Entrada/Saída</h3>
+                        <div class="dir">
+                            <label for="data-movimentacao-inicio" style="margin-right: 5px;">Início:</label>
+                            <input type="date" id="data-movimentacao-inicio" style="height: fit-content; padding: 5px; margin-right: 30px;" onchange="criarGraficoMovimentacao()">
+                            <label for="data-movimentacao-fim" style="margin-right: 5px;">Fim:</label>
+                            <input type="date" id="data-movimentacao-fim" style="height: fit-content; padding: 5px;" onchange="criarGraficoMovimentacao()">
+                        </div>
+                    </div>
+                    <div class="main-grafico">
+                        <canvas id="graficoMovimentacao"></canvas>
+                    </div>
+                </div>
+                <div class="grafico-processos grafico box">
+                    <div class="header">
+                        <h3>Processos</h3>
+                        <div class="dir">
+                            <div id="dia-processo">
+                                <label for="data-processo-dia" style="margin-right: 5px;">Dia:</label>
+                                <input type="date" id="data-processo-dia" style="height: fit-content; padding: 5px; margin-right: 30px;" onchange="pegarDadosProcesso()">
+                            </div>
+                            <div id="periodo-processo" >
+                                <label for="data-processo-inicio" style="margin-right: 5px;">Início:</label>
+                                <input type="date" id="data-processo-inicio" style="height: fit-content; padding: 5px; margin-right: 30px;" onchange="pegarDadosProcesso()">
+                                <label for="data-processo-fim" style="margin-right: 5px;">Fim:</label>
+                                <input type="date" id="data-processo-fim" style="height: fit-content; padding: 5px; margin-right: 30px;" onchange="pegarDadosProcesso()">
+                            </div>
+                            <select id="tempo-processo" onchange="trocarSelecao(this.value, 'processo'); pegarDadosProcesso();">
+                                <option value="dia">Dia</option>
+                                <option value="periodo">Período</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="main-grafico">
+                        <canvas id="graficoProcessos"></canvas>
+                    </div>
+                </div>
+                <div class="grafico-processador grafico box">
+                    <div class="header">
+                        <h3>Processador</h3>
+                        <div class="dir">
+                            <div id="dia-cpu">
+                                <label for="data-cpu-dia" style="margin-right: 5px;">Dia:</label>
+                                <input type="date" id="data-cpu-dia" style="height: fit-content; padding: 5px; margin-right: 30px;" onchange="pegarDadosCpu()">
+                            </div>
+                            <div id="periodo-cpu" >
+                                <label for="data-cpu-inicio" style="margin-right: 5px;">Início:</label>
+                                <input type="date" id="data-cpu-inicio" style="height: fit-content; padding: 5px; margin-right: 30px;" onchange="pegarDadosCpu()">
+                                <label for="data-cpu-fim" style="margin-right: 5px;">Fim:</label>
+                                <input type="date" id="data-cpu-fim" style="height: fit-content; padding: 5px; margin-right: 30px;" onchange="pegarDadosCpu()">
+                            </div>
+                            <select id="tempo-cpu" onchange="trocarSelecao(this.value, 'cpu'); pegarDadosCpu();">
+                                <option value="dia">Dia</option>
+                                <option value="periodo">Período</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="main-grafico">
+                        <canvas id="graficoCPU"></canvas>
+                    </div>
+                </div>
+                <div class="grafico-ram grafico box">
+                    <div class="header">
+                        <h3>Memória RAM</h3>
+                        <div class="dir">
+                            <div id="dia-ram">
+                                <label for="data-ram-dia" style="margin-right: 5px;">Dia:</label>
+                                <input type="date" id="data-ram-dia" style="height: fit-content; padding: 5px; margin-right: 30px;" onchange="pegarDadosRam()">
+                            </div>
+                            <div id="periodo-ram" >
+                                <label for="data-ram-inicio" style="margin-right: 5px;">Início:</label>
+                                <input type="date" id="data-ram-inicio" style="height: fit-content; padding: 5px; margin-right: 30px;" onchange="pegarDadosRam()">
+                                <label for="data-ram-fim" style="margin-right: 5px;">Fim:</label>
+                                <input type="date" id="data-ram-fim" style="height: fit-content; padding: 5px; margin-right: 30px;" onchange="pegarDadosRam()">
+                            </div>
+                            <select id="tempo-ram" onchange="trocarSelecao(this.value, 'ram'); pegarDadosRam();">
+                                <option value="dia">Dia</option>
+                                <option value="periodo">Período</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="main-grafico">
+                        <canvas id="graficoRAM"></canvas>
+                    </div>
+                </div>
+                <div class="box box-outros-funcionarios">
+                    <h3>Outros funcionários</h3>
+                    <hr />
+                    <div id="outros-funcionarios">
+                    </div>
+                </div>
+                <div class="box info-funcionario" id="sobreFuncionario">
+                    <h3>Sobre o funcionário</h3>
+                    <hr />
+                </div>
+            </section>
+        </main>
+    </body>
+</html>
+
+<script>
+    var chartMovimentacao = null;
+    var chartCpu = null;
+    var chartRam = null;
+    var chartProcessos = null;
+
+    const parametrosString = window.location.search;
+    const parametros = new URLSearchParams(parametrosString);
+    const cidade = parametros.get("cidade");
+    const idFuncionario = Number(parametros.get("idFuncionario"));
+
+    if(idFuncionario == 0){
+        document.querySelector(".info-funcionario").style.display = "none";
+        document.querySelector(".box-outros-funcionarios").style.gridRow = "1 / 6";
+    }
+
+    window.onload = () => {
+        pegarFuncionarios();
+        
+        nome_gerente.innerHTML = sessionStorage.NOME_USUARIO;
+
+        document.getElementById("data-movimentacao-inicio").value = moment().subtract(1, 'week').format('YYYY-MM-DD');
+        document.getElementById("data-movimentacao-fim").value = moment().format('YYYY-MM-DD');
+        
+        document.getElementById("data-processo-dia").value = moment().format('YYYY-MM-DD');
+        document.getElementById("data-processo-inicio").value = moment().subtract(1, 'week').format('YYYY-MM-DD');
+        document.getElementById("data-processo-fim").value = moment().format('YYYY-MM-DD');
+
+        document.getElementById("data-cpu-dia").value = moment().format('YYYY-MM-DD');
+        document.getElementById("data-cpu-inicio").value = moment().subtract(1, 'week').format('YYYY-MM-DD');
+        document.getElementById("data-cpu-fim").value = moment().format('YYYY-MM-DD');
+        
+        document.getElementById("data-ram-dia").value = moment().format('YYYY-MM-DD');
+        document.getElementById("data-ram-inicio").value = moment().subtract(1, 'week').format('YYYY-MM-DD');
+        document.getElementById("data-ram-fim").value = moment().format('YYYY-MM-DD');
+
+        trocarSelecao(document.getElementById('tempo-processo').value, "processo");
+        trocarSelecao(document.getElementById('tempo-cpu').value, "cpu");
+        trocarSelecao(document.getElementById('tempo-ram').value, "ram");
+
+        criarGraficoMovimentacao();
+
+        pegarDadosCpu();
+        pegarDadosRam();
+        pegarDadosProcesso();
+
+        pegarCidades();
+        mediaHorasAtivas();
+
+        sobreFuncionario();
+    };
+
+    document.getElementById("select-cidades").addEventListener('change', (event) => {
+        location.href = `analisar-funcionarios.html?cidade=${event.target.value}`;
+    });
+
+    function zeroEsquerda(numero, tamanho){
+        numero = (numero).toString();
+
+        if((numero).toString().length < tamanho){
+            for (let index = tamanho - (numero.length % tamanho); index > 0; index--) {
+                numero = [numero.slice(0, 0), '0', numero.slice(0)].join('');
+            }
+        }
+
+        return numero;
+    }
+
+    function formatarHorario(horario){
+        while(horario.length < 4){
+            horario += "0";
+        }
+
+        return (horario).substring(0, 2) + ":" + (horario).substring(2, 4);
+    }
+
+    function trocarSelecao(valor, tipoGrafico){
+        if(valor == "dia"){
+            document.getElementById(`periodo-${tipoGrafico}`).style.display = "none";
+            document.getElementById(`dia-${tipoGrafico}`).style.display = "block";
+        }
+        else{
+            document.getElementById(`periodo-${tipoGrafico}`).style.display = "block";
+            document.getElementById(`dia-${tipoGrafico}`).style.display = "none";
+        }
+    }
+
+    function pegarDadosMovimentacao(acao, grafico, dados){
+        const periodoInicio = moment(document.getElementById('data-movimentacao-inicio').value).format('YYYY-MM-DD');
+        const periodoFim = moment(document.getElementById('data-movimentacao-fim').value).format('YYYY-MM-DD');
+        fetch(`/analiseAgda/pegarMovimentacao?acao=${acao}&periodoInicio=${periodoInicio}&periodoFim=${periodoFim}&idFuncionario=${idFuncionario}&cidade=${cidade}&idEmpresa=${sessionStorage['ID_EMPRESA']}`).then((res) => {
+            if(res.status == 204){
+                if(chartMovimentacao != null){
+                    chartMovimentacao.destroy();
+                }
+
+                ctx = document.getElementById('graficoMovimentacao').getContext("2d");
+                ctx.font = "16px Arial"
+                ctx.fillText("Nenhum dado encontrado encontrado!", 10, 30);
+                ctx.fillText("Tente mudar o dia ou o período", 10, 60);
+            }
+            else if(res.ok){
+                res.json().then((resposta) => {
+                    for (let index = 0; index < resposta.length; index++) {
+                        if(! dados.labels.includes(moment(resposta[index]['dataEntrada']).utc(0).format('DD/MM')) && resposta[index]['dataEntrada'] != null){
+                            dados.labels.push(moment(resposta[index]['dataEntrada']).utc(0).format('DD/MM'));
+                        }
+
+                        if(! dados.labels.includes(moment(resposta[index]['dataSaida']).utc(0).format('DD/MM')) && resposta[index]['dataSaida'] != null){
+                            dados.labels.push(moment(resposta[index]['dataSaida']).utc(0).format('DD/MM'));
+                        }
+
+                        if(acao == "E"){
+                            dados.datasets[0].data.push(moment(resposta[index]['horarioEntrada']).utc(0).format('HHmm'));
+                        }
+                        else{
+                            dados.datasets[1].data.push(moment(resposta[index]['horarioSaida']).utc(0).format('HHmm'));
+                        }
+
+                        window.chartMovimentacao.update();
+                    }
+                });
+            }
+        });
+    }
+
+    function criarGraficoMovimentacao(){
+        if(window.chartMovimentacao != null){
+            chartMovimentacao.destroy();
+        }
+        
+        const data = {
+            labels: [],
+            datasets: [
+                {
+                    label: 'Primeira entrada',
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: [],
+                },
+                {
+                    label: 'Última saída',
+                    backgroundColor: 'rgb(0, 255, 0)',
+                    borderColor: 'rgb(0, 255, 0)',
+                    data: [],
+                },
+            ]
+        };
+
+        const config = {
+            type: 'line',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let hora = zeroEsquerda(context.raw);
+
+                                return formatarHorario(hora);
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        max : 2359,
+                        ticks: {
+                            callback: function(value, index, ticks) {
+                                let hora = zeroEsquerda(value, 4);
+
+                                return formatarHorario(hora);
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        window.chartMovimentacao = new Chart(document.getElementById('graficoMovimentacao').getContext('2d'), config);
+
+        pegarDadosMovimentacao('E', document.getElementById('graficoMovimentacao').getContext('2d'), data);
+        pegarDadosMovimentacao('S', document.getElementById('graficoMovimentacao').getContext('2d'), data);
+    }
+
+    function pegarDadosProcesso(){
+        let periodoInicio;
+        let periodoFim;
+
+        if(document.getElementById('tempo-processo').value == "periodo"){
+            periodoInicio = moment(document.getElementById('data-processo-inicio').value).format('YYYY-MM-DD');
+            periodoFim = moment(document.getElementById('data-processo-fim').value).format('YYYY-MM-DD');    
+        }
+        else{
+            periodoInicio = moment(document.getElementById('data-processo-dia').value).format('YYYY-MM-DD');
+            periodoFim = moment(document.getElementById('data-processo-dia').value).add(1, 'days').format('YYYY-MM-DD');
+        }
+
+        fetch(`/analiseAgda/pegarProcessos?periodoInicio=${periodoInicio}&periodoFim=${periodoFim}&idFuncionario=${idFuncionario}&cidade=${cidade}&idEmpresa=${sessionStorage['ID_EMPRESA']}`).then((res) => {
+            if(res.status == 204){
+                if(chartProcessos != null){
+                    chartProcessos.destroy();
+                }
+
+                ctx = document.getElementById('graficoProcessos').getContext("2d");
+                ctx.font = "16px Arial"
+                ctx.fillText("Nenhum dado encontrado encontrado!", 10, 30);
+                ctx.fillText("Tente mudar o dia ou o período", 10, 60);
+            }
+            else if(res.ok){
+                res.json().then((resposta) => {
+                    graficoProcessos(resposta);
+                });
+            }
+        });
+    }
+
+    function graficoProcessos(resposta){
+        if(chartProcessos != null){
+            chartProcessos.destroy();
+        }
+
+        let labels = [];
+
+        const data = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Quantidade dos processos',
+                    backgroundColor: '#00CA43',
+                    borderColor: '#00CA43',
+                    data: [],
+                },
+            ]
+        };
+
+        for (let index = 0; index < resposta.length; index++) {
+            labels.push(formatarHorario(zeroEsquerda(resposta[index]['hora'], 2)));
+            data.datasets[0].data.push(resposta[index]['valor']);
+        }
+
+        const config = {
+            type: 'line',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+            }
+        };
+
+        if(resposta.length == 1){
+            config.type = "bar";
+        }
+
+        chartProcessos = new Chart(document.getElementById('graficoProcessos'), config);
+    }
+
+    function pegarDadosCpu(){
+        let periodoInicio;
+        let periodoFim;
+
+        if(document.getElementById('tempo-cpu').value == "periodo"){
+            periodoInicio = moment(document.getElementById('data-cpu-inicio').value).format('YYYY-MM-DD');
+            periodoFim = moment(document.getElementById('data-cpu-fim').value).format('YYYY-MM-DD');    
+        }
+        else{
+            periodoInicio = moment(document.getElementById('data-cpu-dia').value).format('YYYY-MM-DD');
+            periodoFim = moment(document.getElementById('data-cpu-dia').value).add(1, 'days').format('YYYY-MM-DD');
+        }
+
+        fetch(`/analiseAgda/pegarCpu?periodoInicio=${periodoInicio}&periodoFim=${periodoFim}&idFuncionario=${idFuncionario}&cidade=${cidade}&idEmpresa=${sessionStorage['ID_EMPRESA']}`).then((res) => {
+            if(res.status == 204){
+                if(chartCpu != null){
+                    chartCpu.destroy();
+                }
+
+                ctx = document.getElementById('graficoCPU').getContext("2d");
+                ctx.font = "16px Arial"
+                ctx.fillText("Nenhum dado encontrado encontrado!", 10, 30);
+                ctx.fillText("Tente mudar o dia ou o período", 10, 60);
+            }
+            else if(res.ok){
+                res.json().then((resposta) => {
+                    graficoCpu(resposta);
+                });
+            }
+        });
+    }
+
+    function graficoCpu(resposta){
+        if(chartCpu != null){
+            chartCpu.destroy();
+        }
+
+        let labels = [];
+
+        const data = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Média CPU (%)',
+                    backgroundColor: '#00CA43',
+                    borderColor: '#00CA43',
+                    data: [],
+                },
+            ]
+        };
+
+        for (let index = 0; index < resposta.length; index++) {
+            labels.push(formatarHorario(zeroEsquerda(resposta[index]['hora'], 2)));
+            data.datasets[0].data.push(resposta[index]['valor']);
+        }
+
+        const config = {
+            type: 'line',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+            }
+        };
+
+        if(resposta.length == 1){
+            config.type = "bar";
+        }
+
+        chartCpu = new Chart(document.getElementById('graficoCPU'), config);
+    }
+    
+    function pegarDadosRam(){
+        let periodoInicio;
+        let periodoFim;
+
+        if(document.getElementById('tempo-ram').value == "periodo"){
+            periodoInicio = moment(document.getElementById('data-ram-inicio').value).format('YYYY-MM-DD');
+            periodoFim = moment(document.getElementById('data-ram-fim').value).format('YYYY-MM-DD');    
+        }
+        else{
+            periodoInicio = moment(document.getElementById('data-ram-dia').value).format('YYYY-MM-DD');
+            periodoFim = moment(document.getElementById('data-ram-dia').value).add(1, 'days').format('YYYY-MM-DD');
+        }
+
+        fetch(`/analiseAgda/pegarRam?periodoInicio=${periodoInicio}&periodoFim=${periodoFim}&idFuncionario=${idFuncionario}&cidade=${cidade}&idEmpresa=${sessionStorage['ID_EMPRESA']}`).then((res) => {
+            if(res.status == 204){
+                if(chartRam != null){
+                    chartRam.destroy();
+                }
+
+                ctx = document.getElementById('graficoRAM').getContext("2d");
+                ctx.font = "16px Arial"
+                ctx.fillText("Nenhum dado encontrado encontrado!", 10, 30);
+                ctx.fillText("Tente mudar o dia ou o período", 10, 60);
+            }
+            else if(res.ok){
+                res.json().then((resposta) => {
+                    graficoRam(resposta);
+                });
+            }
+        });
+    }
+
+    function graficoRam(resposta){
+        if(chartRam != null){
+            chartRam.destroy();
+        }
+
+        let labels = [];
+
+        const data = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Média RAM (%)',
+                    backgroundColor: '#00CA43',
+                    borderColor: '#00CA43',
+                    data: [],
+                },
+            ]
+        };
+
+        for (let index = 0; index < resposta.length; index++) {
+            labels.push(formatarHorario(zeroEsquerda(resposta[index]['hora'], 2)));
+            data.datasets[0].data.push(resposta[index]['valor']);
+        }
+
+        const config = {
+            type: 'line',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+            }
+        };
+
+        if(resposta.length == 1){
+            config.type = "bar";
+        }
+
+        chartRam = new Chart(document.getElementById('graficoRAM'), config);
+    }
+
+    function pegarCidades(){
+        fetch(`/analiseAgda/pegarCidades?idEmpresa=${sessionStorage['ID_EMPRESA']}`).then((res) => {
+            if(res.ok){
+                res.json().then((resposta) => {
+                    let indiceCidade;
+
+                    for (let index = 0; index < resposta.length; index++) {
+                        document.getElementById("select-cidades").innerHTML += `<option value="${resposta[index].cidade}">${resposta[index].pais} - ${resposta[index].cidade}</option>`;
+                        
+                        if(cidade == resposta[index].cidade){   
+                            indiceCidade = index;
+                        }
+                    }
+
+                    document.getElementById("select-cidades").selectedIndex = indiceCidade;
+                });
+            }
+        });
+    }
+
+    function pegarFuncionarios(){
+        fetch(`/analiseAgda/pegarFuncionarios?idEmpresa=${sessionStorage['ID_EMPRESA']}&cidade=${cidade}`).then((res) => {
+            if(res.ok){
+                res.json().then((resposta) => {
+                    document.getElementById("outros-funcionarios").innerHTML = "";
+                    
+                    kpiQtdFunc.innerHTML = resposta.length;
+
+                    document.getElementById("outros-funcionarios").innerHTML += `<a class="funcionario func0" href="analisar-funcionarios.html?cidade=${cidade}">Média dos funcionários</a>`;
+
+                    for (let index = 0; index < resposta.length; index++) {
+                        document.getElementById("outros-funcionarios").innerHTML += `<a class="funcionario func${resposta[index].idFuncionario}" href="analisar-funcionarios.html?idFuncionario=${resposta[index].idFuncionario}&cidade=${cidade}">${resposta[index].nome}</a>`;
+                    }
+
+                    document.querySelector(`.func${idFuncionario}`).classList.add("selecionado");
+                });
+            }
+        });
+    }
+
+    function mediaHorasAtivas(){
+        fetch(`/analiseAgda/mediaHorasAtivas?idFuncionario=${idFuncionario}&dataInicio=${moment().subtract(30, "days").format("YYYY-MM-DD")}&dataFinal=${moment().format("YYYY-MM-DD")}&cidade=${cidade}&idEmpresa=${sessionStorage['ID_EMPRESA']}`)
+        .then((res) => {
+            if (res.ok) {
+                if(res.status == 204){
+                    kpiHoras.innerHTML += "Não foi possível calcular";
+                    return;
+                }
+                res.json().then((resposta) => {
+                    let horariosDiferenca = [];
+
+                    resposta.forEach(item => {
+                        if(item.dataSaida != null){
+                            let horarioEntrada = moment(item.dataEntrada).utc();
+                            let horarioSaida = moment(item.dataSaida).utc();
+                            horariosDiferenca.push(horarioSaida.diff(horarioEntrada));
+                        }
+                    });
+
+                    let horasAtivas = 0;
+                    horariosDiferenca.forEach(horario => {
+                        horasAtivas += horario;
+                    });
+
+                    if(horasAtivas <= 0){
+                        kpiHoras.innerHTML += "Não foi possível calcular";
+                    }
+                    
+                    let horas = moment.duration(horasAtivas / horariosDiferenca.length).hours();
+                    let minutos = moment.duration(horasAtivas / horariosDiferenca.length).minutes();
+
+                    if (horas == 1) {
+                        kpiHoras.innerHTML += horas;
+                        kpiHoras.innerHTML += " hora "
+                    }
+                    else if (horas > 1) {
+                        kpiHoras.innerHTML += horas;
+                        kpiHoras.innerHTML += " horas "
+                    }
+
+                    if (minutos == 1) {
+                        kpiHoras.innerHTML += "e "
+                        kpiHoras.innerHTML += minutos;
+                        kpiHoras.innerHTML += " minuto"
+                    }
+                    else if (minutos > 1) {
+                        kpiHoras.innerHTML += "e "
+                        kpiHoras.innerHTML += minutos;
+                        kpiHoras.innerHTML += " minutos"
+                    }
+                });
+            }
+        })
+        .catch((erro) => {
+            console.log(erro);
+        });
+    }
+
+    function sobreFuncionario(){
+        fetch(`/analiseAgda/sobreFuncionario?idFuncionario=${idFuncionario}`).then(
+            function (res) {
+                if (res.ok) {
+                    res.json().then((resposta) => {
+                        document.getElementById("sobreFuncionario").innerHTML += `<p><b>Nome: </b>${resposta[0].nome}</p><br>`;
+                        document.getElementById("sobreFuncionario").innerHTML += `<p><b>Cargo: </b>${resposta[0].cargo}</p><br>`;
+                        document.getElementById("sobreFuncionario").innerHTML += `<p><b>E-mail: </b>${resposta[0].email}</p><br>`;
+                        document.getElementById("sobreFuncionario").innerHTML += `<p><b>Telefone: </b>${resposta[0].telefone}</p><br>`;
+                    });
+                }
+            }
+        );
+    }
+</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="./jsDash/script-dash.js"></script>

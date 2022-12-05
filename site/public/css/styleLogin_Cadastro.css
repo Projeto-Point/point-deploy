@@ -1,0 +1,450 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+
+:root {
+    --color-vermelhoAlerta: #d0342c;
+    --cor1: #00CA43;
+    --cor2: #00A219;
+    --cor3: #007B00;
+    --radius: 4px;
+}
+
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: #a1ffce;
+    background: -webkit-linear-gradient(to right,
+            #faffd1,
+            #a1ffce);
+    background: linear-gradient(to right,
+            #faffd1,
+            #a1ffce);
+
+    display: grid;
+    place-items: center;
+
+    position: static;
+}
+
+p.alerta {
+    background: #d0342c;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    visibility: hidden;
+    font-weight: 600;
+}
+
+.body_login,
+#form_cadastro {
+    margin: 0;
+    padding: 0;
+    background-color: lightgray;
+    display: flex;
+    justify-items: center;
+    padding-bottom: 3rem;
+}
+
+.login,
+.cadastro {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    position: relative;
+}
+
+.span_text_scad {
+    font-size: 1.1rem;
+    font-weight: 400;
+}
+
+#Login.container,
+#cadastro.container {
+    background-image: url("../assets/imgs/background_login_registro.jpg");
+}
+
+.icon {
+    position: absolute;
+    width: 30px;
+    left: 55%;
+    top: 5%;
+}
+
+#form_cadastro .icon {
+    left: 5%;
+}
+
+.container {
+    align-items: center;
+    align-content: center;
+    width: 80%;
+
+    display: flex;
+    box-shadow: 0px 0px 10px -1px rgba(0, 0, 0, 0.68);
+    margin: auto;
+    margin-top: 5%;
+}
+
+
+.img_login,
+.img_cadastro {
+    width: 150px;
+    margin-top: 2rem;
+}
+
+
+
+.botao_login,
+.botao_cadastro {
+    padding-bottom: 10%;
+}
+
+.Point_fundo {
+    width: 50%;
+    height: 100%;
+}
+
+.banner_login,
+.banner_cadastro {
+    width: 50%;
+    padding-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: #F8F8F8;
+    gap: 2rem;
+}
+
+.banner_cadastro {
+    position: relative;
+    gap: 1rem;
+}
+
+
+.custom-btn {
+    width: 130px;
+    height: 40px;
+    color: #fff;
+    border-radius: 5px;
+    padding: 10px 25px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 500;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+    box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+        7px 7px 20px 0px rgba(0, 0, 0, .1),
+        4px 4px 5px 0px rgba(0, 0, 0, .1);
+    outline: none;
+}
+
+
+.btnEntrar {
+    background: var(--cor2);
+    border: none;
+    z-index: 1;
+    margin-top: 27px;
+    width: 180px;
+    font-size: 1.1rem;
+    outline: none;
+    padding: .5rem 1rem;
+}
+
+.btnEntrar:after {
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 100%;
+    top: 0;
+    right: 0;
+    z-index: -1;
+    background-color: var(--cor3);
+    border-radius: 5px;
+    box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+        7px 7px 20px 0px rgba(0, 0, 0, .1),
+        4px 4px 5px 0px rgba(0, 0, 0, .1);
+    transition: all 0.5s ease;
+}
+
+.btnEntrar:hover {
+    color: #fff;
+}
+
+.btnEntrar:hover:after {
+    left: 0;
+    width: 100%;
+}
+
+.btnEntrar:active {
+    top: 2px;
+}
+
+@media (max-width: 768px) {
+
+    .imagem_login,
+    .imagem_cadastro {
+        display: none;
+    }
+
+    .banner_login,
+    .banner_cadastro {
+        width: 100%;
+    }
+
+    .container {
+        height: min-content;
+    }
+
+    .sem_cadastro {
+        margin-bottom: 1rem;
+    }
+
+    .icon {
+        left: 5%;
+    }
+}
+
+@media (max-width: 425px) {
+    body {
+        margin: 0;
+    }
+
+    .container {
+        margin: 0;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    .banner_login,
+    .banner_cadastro {
+        height: 100vh;
+        width: 100vw;
+        margin: 0;
+    }
+
+    .icon {
+        left: 5%;
+    }
+}
+
+svg path,
+svg rect {
+    fill: var(--cor1);
+}
+
+.loader {
+    display: none;
+}
+
+/* Inputs */
+
+.group:first-child{
+    margin-top: 12%;
+}
+
+.group {
+    position: relative;
+    margin-bottom: 3%;
+    margin-top: 4%;
+}
+
+input {
+    font-size: 18px;
+    padding: 10px 10px 10px 5px;
+    display: block;
+    width: 235px;
+    border: none;
+    border-bottom: 1px solid #757575;
+    background-color: transparent;
+}
+
+input:focus {
+    outline: none;
+}
+
+/* LABEL ======================================= */
+label {
+    color: #999;
+    font-size: 1rem;
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 5px;
+    top: 10px;
+    transition: 0.2s ease all;
+    -moz-transition: 0.2s ease all;
+    -webkit-transition: 0.2s ease all;
+}
+
+/* active state */
+input:focus~label,
+input:valid~label {
+    top: -20px;
+    font-size: 14px;
+    color: var(--cor3);
+}
+
+/* BOTTOM BARS ================================= */
+.bar {
+    position: relative;
+    display: block;
+    width: 250px;
+}
+
+.bar:before,
+.bar:after {
+    content: '';
+    height: 2px;
+    width: 0;
+    bottom: 1px;
+    position: absolute;
+    background: var(--cor3);
+    transition: 0.2s ease all;
+    -moz-transition: 0.2s ease all;
+    -webkit-transition: 0.2s ease all;
+}
+
+.bar:before {
+    left: 50%;
+}
+
+.bar:after {
+    right: 50%;
+}
+
+/* active state */
+input:focus~.bar:before,
+input:focus~.bar:after {
+    width: 50%;
+}
+
+/* HIGHLIGHTER ================================== */
+.highlight {
+    position: absolute;
+    height: 60%;
+    width: 100%;
+    top: 25%;
+    left: 0;
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+/* active state */
+input:focus~.highlight {
+    -webkit-animation: inputHighlighter 0.3s ease;
+    -moz-animation: inputHighlighter 0.3s ease;
+    animation: inputHighlighter 0.3s ease;
+}
+
+/* ANIMATIONS ================ */
+@-webkit-keyframes inputHighlighter {
+    from {
+        background: var(--cor3);
+    }
+
+    to {
+        width: 0;
+        background: transparent;
+    }
+}
+
+@-moz-keyframes inputHighlighter {
+    from {
+        background: var(--cor3);
+    }
+
+    to {
+        width: 0;
+        background: transparent;
+    }
+}
+
+@keyframes inputHighlighter {
+    from {
+        background: var(--cor3);
+    }
+
+    to {
+        width: 0;
+        background: transparent;
+    }
+}
+
+
+
+.dropdown {
+    
+    margin-top: 2%;
+    width: 250px;
+    display: inline-block;
+    background: transparent;
+    border-radius: 2px;
+    box-shadow: 0 0 2px rgb(204, 204, 204);
+    border-bottom: 2px solid var(--cor3);
+    position: relative;
+    font-size: 14px;
+    color: #474747;
+    height: 100%;
+    text-align: left
+  }
+  .dropdown .select {
+      cursor: pointer;
+      display: block;
+      padding: 10px
+  }
+  .dropdown .select > i {
+      font-size: 
+      13px;
+      color: #888;
+      cursor: pointer;
+      transition: all .3s ease-in-out;
+      float: right;
+      line-height: 20px
+  }
+  .dropdown:hover {
+      box-shadow: 0 0 4px rgb(204, 204, 204)
+  }
+  .dropdown:active {
+      background-color: #f8f8f8
+  }
+  .dropdown.active:hover,
+  .dropdown.active {
+      box-shadow: 0 0 4px rgb(204, 204, 204);
+      border-radius: 2px 2px 0 0;
+      border: 1px solid var(--cor3);
+  }
+  .dropdown.active .select > i {
+      transform: rotate(-90deg)
+  }
+  .dropdown .dropdown-menu {
+      position: absolute;
+      background-color: #fff;
+      width: 100%;
+      left: 0;
+      margin-top: 1px;
+      box-shadow: 0 1px 2px rgb(204, 204, 204);
+      border-radius: 0 1px 2px 2px;
+      overflow: hidden;
+      display: none;
+      max-height: 144px;
+      overflow-y: auto;
+      z-index: 9
+  }
+  .dropdown .dropdown-menu li {
+      padding: 10px;
+      transition: all .2s ease-in-out;
+      cursor: pointer
+  } 
+  .dropdown .dropdown-menu {
+      padding: 0;
+      list-style: none
+  }
+  .dropdown .dropdown-menu li:hover {
+      background-color: #f2f2f2
+  }
+  .dropdown .dropdown-menu li:active {
+      background-color: #e2e2e2
+  }

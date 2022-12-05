@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang=pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alertas | Point</title>
+    <link rel="stylesheet" href="css/styleDash.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+</head>
+
+<body>
+    <header>
+
+        <nav id="menu">
+            <a href="maquinas.html" class="logo">
+                <img src="../assets/imgs/Point.png">
+            </a>
+            <hr>
+            <a href="funcionarios.html" class="img-nav">
+                <img src="../assets/imgs/user.png" >
+                <span>Funcionários</span>
+            </a>
+            <a href="maquinas.html" class="img-nav">
+                <img src="./assets/imgs/imac.png">
+                <span>Máquinas</span>
+            </a>
+            <a href="instancias.html" class="img-nav">
+                <img src="assets/dash/server.png">
+                <span>Instâncias</span>
+            </a>
+            <a href="alertas.html" class="img-nav">
+                <img src="assets/dash/alertas.png">
+                <span>Alertas</span>
+            </a>
+            <a href="localizacao.html?filtroMapa=geral" class="img-nav">
+                <img src="assets/imgs/pin.png">
+                <span>Localização</span>
+            </a>
+            <a href="configuracoes.html" class="img-nav">
+                <img src="./assets/imgs/setting.png">
+                <span>Configurações</span>
+            </a>
+            <hr>
+            <a class="img-nav" id="sair">
+                <img src="../assets/imgs/x.png" />
+                <span>Sair</span>
+            </a>
+        </nav>
+        <nav id="menu-mobile"><img src="assets/dash/bars.svg"></nav>
+    </header>
+    <main>
+        <section id="alertas">
+            <div class="menu-lateral">
+                <div class="filtro box" >
+                    <p>Ordenar por:</p>
+                    <select id="select-order"onchange="listarMaquina()">
+                        <option value="0">Mais recentes</option>
+                        <option value="1">Mais antigos</option>
+                    </select>
+                </div>
+                <div class="filtro box" onchange="listarMaquina()">
+                    <p>Resolução:</p>
+                    <div class="opcao" >
+                        <input type="checkbox" id="aberto" value="aberto"><label for="aberto">Aberto</label>
+                    </div>
+
+                    <div class="opcao">
+                        <input type="checkbox" id="fechado" value="fechado"><label for="fechado">Fechado</label>
+                    </div>
+                </div>
+                <div class="filtro box" onchange="listarMaquina()">
+                    <p>Componente:</p>
+                    <div class="opcao"><input type="checkbox" id="CPU" value="cpu"><label for="">CPU</label></div>
+                    <div class="opcao"><input type="checkbox" id="RAM" value="ram"><label for="">RAM</label></div>
+                    <div class="opcao"><input type="checkbox" id="DISCO" value="disco"><label for="">DISCO</label></div>
+                </div>
+                <div class="filtro box" onchange="listarMaquina()">
+                    <p>Tipo de máquina:</p>
+                    <div class="opcao"><input type="checkbox" id="servidor" value="servidor"><label for="">Servidor</label></div>
+                    <div class="opcao"><input type="checkbox" id="desktop" value="desktop"><label for="">Desktop</label></div>
+                </div>
+            </div>
+            <div class="main">
+                <section class="top">
+                    <div class="top-meio">
+                        <input id="inp-pesquisar-funcionario" type="search" placeholder="Pesquise por nome do funcionário" onkeyup="listarMaquina()">
+                    </div>
+                    <div class="top-dir">
+                       
+                        <p class="nome"><span id="nomeGerente"></span></p>
+                        <img src="../assets/dash/icons8-user-64.png">
+                    </div>
+                </section>
+                <div id="lista-alertas">
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="../script.js"></script>
+    <script>
+
+        function listarMaquina(){
+
+
+        var selectOrder = document.getElementById('select-order').value
+
+        nomeGerente.innerHTML=sessionStorage.NOME_USUARIO;
+
+        fetch(`/maquinas/listarAlertas?idEmpresa=${sessionStorage.ID_EMPRESA}`)
+        .then((res) => {
+            if(res.ok){
+                res.json().then((resposta) => {
+
+                    // FIXME: Deixar alinhado o titulo / imagem / horário
+                
+                    listarTudo(resposta, selectOrder)
+
+                });
+            }
+        })
+        .catch((erro) => {
+            console.log(erro);
+        });
+    }
+
+    listarMaquina()
+
+    function has_check(){
+        return document.getElementById('DISCO').checked || document.getElementById('RAM').checked || document.getElementById('CPU').checked
+    }
+
+    var componentes = [0,0,0]
+    function listarTudo(dadosAlerta, ordem, check){
+        
+        //console.log(dadosAlerta)
+            
+            document.getElementById('CPU').checked?componentes[0] = 'CPU':componentes[0] = 0
+            document.getElementById('RAM').checked?componentes[1] = 'RAM':componentes[1] = 0
+            document.getElementById('DISCO').checked?componentes[2] = 'DISCO':componentes[2] = 0
+
+        document.getElementById("lista-alertas").innerHTML = ''
+
+        if(ordem == 1){
+
+            for (let i = 0; i < dadosAlerta.length; i++) {
+
+                imagemTipoMaquina = ''
+    
+                if(dadosAlerta[i].tipo == 'Servidor'){
+    
+                    imagemTipoMaquina = '<img src="../dashboard/assets/dash/instancia.png" style="width: 30px; height: 30px;">'
+                    
+                }else{
+                    imagemTipoMaquina = '<img src="../dashboard/assets/dash/computer.png" style="width: 30px; height: 30px;">'
+                    
+                }
+
+                console.log(has_check())
+                if(!componentes.includes(dadosAlerta[i].componente) && has_check())continue
+                //if(componentes.length > 0 && dadosAlerta[i].componente in componentes == false)continue
+                var abaPesquisa = document.getElementById('inp-pesquisar-funcionario').value;
+                if(dadosAlerta[i].nome.toUpperCase().indexOf(abaPesquisa.toUpperCase()) < 0)continue
+                console.log('dwd')
+                if(document.getElementById('aberto').checked && dadosAlerta[i].resolucao.toUpperCase() == 'FECHADO')continue
+                if(document.getElementById('fechado').checked && dadosAlerta[i].resolucao.toUpperCase() == 'ABERTO')continue
+                if(document.getElementById('servidor').checked && dadosAlerta[i].tipo.toUpperCase() == 'DESKTOP')continue
+                if(document.getElementById('desktop').checked && dadosAlerta[i].tipo.toUpperCase() == 'SERVIDOR')continue
+    
+                document.getElementById("lista-alertas").innerHTML += `
+                <div class="alerta box">
+                    
+                    <h3 id="titulo-alerta">
+                        ${imagemTipoMaquina}
+                        ${dadosAlerta[i].titulo}</h3>
+                    <p id="data-alerta">${moment(dadosAlerta[i].dataEhora).utc(0).format("DD/MM/YYYY [às] HH:mm")}</p>
+                    <div class="infoAlerta">
+                    <p id="responsavel-alerta"><span>Funcionário: </span>${dadosAlerta[i].nome}</p>
+                    <p id="cargo-alerta"><span>Cargo: </span>${dadosAlerta[i].cargo}</p>
+                </div>
+                    <p id="resolucao-alerta"><span>Status: </span>${dadosAlerta[i].resolucao}<span class="bolinha bol-aberto"></span></p>
+                    <a class="btn-link" href="./analise.html?idMaquina=${dadosAlerta[i].idMaquina}" id="btn-alerta">Ver mais</a>
+                </div>`;
+            }
+        }else if(ordem == 0){
+    
+        for (let i = dadosAlerta.length-1; i >= 0; i--) {
+
+            imagemTipoMaquina = ''
+
+            if(dadosAlerta[i].tipo == 'Servidor'){
+
+                imagemTipoMaquina = '<img src="../dashboard/assets/dash/instancia.png" style="width: 30px; height: 30px;">'
+                
+            }else{
+                imagemTipoMaquina = '<img src="../dashboard/assets/dash/computer.png" style="width: 30px; height: 30px;">'
+                
+            }
+
+            
+            console.log(has_check())
+            if(!componentes.includes(dadosAlerta[i].componente) && has_check())continue
+
+            var abaPesquisa = document.getElementById('inp-pesquisar-funcionario').value;
+            
+            if(dadosAlerta[i].nome.toUpperCase().indexOf(abaPesquisa.toUpperCase()) < 0)continue
+            if(document.getElementById('aberto').checked && dadosAlerta[i].resolucao.toUpperCase() == 'FECHADO')continue
+            if(document.getElementById('fechado').checked && dadosAlerta[i].resolucao.toUpperCase() == 'ABERTO')continue
+            if(document.getElementById('servidor').checked && dadosAlerta[i].tipo.toUpperCase() == 'DESKTOP')continue
+            if(document.getElementById('desktop').checked && dadosAlerta[i].tipo.toUpperCase() == 'SERVIDOR')continue
+
+            document.getElementById("lista-alertas").innerHTML += `
+            <div class="alerta box">
+                
+                <h3 id="titulo-alerta">
+                    ${imagemTipoMaquina}
+                    ${dadosAlerta[i].titulo}</h3>
+                <p id="data-alerta">${moment(dadosAlerta[i].dataEhora).utc(0).format("DD/MM/YYYY [às] HH:mm")}</p>
+                <div class="infoAlerta">
+                <p id="responsavel-alerta"><span>Funcionário: </span>${dadosAlerta[i].nome}</p>
+                <p id="cargo-alerta"><span>Cargo: </span>${dadosAlerta[i].cargo}</p>
+            </div>
+                <p id="resolucao-alerta"><span>Status: </span>${dadosAlerta[i].resolucao}<span class="bolinha bol-aberto"></span></p>
+                <a class="btn-link" href="./analise.html?idMaquina=${dadosAlerta[i].idMaquina}" id="btn-alerta">Ver mais</a>
+            </div>`;
+        }
+
+        }
+    
+    }
+
+
+    </script>
+    <script src="./jsDash/script-dash.js"></script>\

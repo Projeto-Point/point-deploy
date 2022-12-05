@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Tempo Real | Point</title>
+    <link rel="stylesheet" href="css/styleDash.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <nav id="menu">
+            <a href="maquinas.html" class="logo">
+                <img src="../assets/imgs/Point.png">
+            </a>
+            <hr>
+            <a href="funcionarios.html" class="img-nav">
+                <img src="../assets/imgs/user.png" >
+                <span>Funcionários</span>
+            </a>
+            <a href="maquinas.html" class="img-nav">
+                <img src="./assets/imgs/imac.png">
+                <span>Máquinas</span>
+            </a>
+            <a href="instancias.html" class="img-nav">
+                <img src="assets/dash/server.png">
+                <span>Instâncias</span>
+            </a>
+            <a href="alertas.html" class="img-nav">
+                <img src="assets/dash/alertas.png">
+                <span>Alertas</span>
+            </a>
+            <a href="localizacao.html?filtroMapa=geral" class="img-nav">
+                <img src="assets/imgs/pin.png">
+                <span>Localização</span>
+            </a>
+            <a href="configuracoes.html" class="img-nav">
+                <img src="./assets/imgs/setting.png">
+                <span>Configurações</span>
+            </a>
+            <hr>
+            <a class="img-nav" id="sair">
+                <img src="../assets/imgs/x.png" />
+                <span>Sair</span>
+            </a>
+        </nav>
+        <nav id="menu-mobile"><img src="assets/dash/bars.svg"></nav>
+    </header>
+    <main>
+        <section class="top">
+            <div class="top-esq">
+                <p class="titulo">Olá, <span id="b_usuario"></span></p>
+                <p class="subtitulo">17/10/2022</p>
+            </div>
+            <div class="top-meio" style="visibility: hidden;">
+                <input id="inp-pesquisar-funcionario" type="search" placeholder="Pesquise o nome de um funcionário...">
+            </div>
+            <div class="top-dir">
+                <p class="nome"><span id="nome_gerente"></span></p>
+                <img src="../assets/dash/icons8-user-64.png">
+            </div>
+        </section>
+        <section class="dashboard">
+            <div class="grafico" id="gfCpu">
+                <h3>Processador</h3>
+                <div> <canvas id="graficoCPU" style="position: relative;"></canvas></div>
+            </div>
+            <div class="grafico" id="gfDisco">
+                <h3>Disco</h3>
+                <div id="div-disco" data-content="0.0"><canvas id="graficoDISCO" style="position: relative;"></canvas></div>
+            </div>
+            <div class="grafico" id="gfRam">
+                <h3>Memória RAM</h3>
+                <div>
+                    <canvas id="graficoRAM" style="position: relative;"></canvas>
+                </div>
+            </div>
+        <div class="tabela" id="tbFuncionario">
+
+                <h3>Informações do funcionário</h3>
+
+                
+            <div class="container-info">
+
+                <div class="part">
+                    <p><b>Nome: </b><span id="nome"></span></p>
+                    <p><b>Cargo: </b><span id="cargo"></span></p>
+                    <p><b>E-mail: </b><span id="mail"></span></p>
+                    <p><b>Telefone: </b><span id="telefone"></span></p>
+                </div>
+
+                <div class="part">
+                    <p><b>País: </b><span id="nomed">BR</span></p>
+                    <p><b>Cidade: </b><span id="cargod">São Paulo</span></p>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="tabela" id="tbMaquina">
+
+            <h3>Informações da Máquina</h3>
+
+            
+        <div class="container-info">
+
+            <div class="part" id="tbMaquina-first">
+               
+            </div>
+
+            <div class="part" id="tbMaquina-sec">
+     
+            </div>
+        </div>
+
+    </div>
+
+        
+
+        </section>
+    </main>
+</body>
+
+</html>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="../script.js"></script>
+<script>
+    const tempoAtualizacao = 10 * 1000;
+    var gerente= sessionStorage.NOME_USUARIO
+
+    b_usuario.innerHTML= gerente;
+    nome_gerente.innerHTML= gerente;
+
+    var proximaAtualizacao;
+
+    var cpuMedida = [];
+    var discoMedida = [];
+    var discoDisponivel= 0;
+    var ramMedida = [];
+    var idMaquina;
+
+
+    window.onload = () => {
+        const parametrosString = window.location.search;
+        const parametros = new URLSearchParams(parametrosString);
+        idMaquina = Number(parametros.get("idMaquina"));
+
+        fetch(`/maquinas/verificarAtividade?idMaquina=${idMaquina}`).then(function (res) {
+            if (res.ok) {
+                if(res.status == 204){
+                    recuperarDados();
+                }
+                res.json().then(resposta => {
+                    console.log(resposta);
+                    if(resposta[0].dataEntrada == null){
+                        document.querySelector('.dashboard').innerHTML = `<p style="grid-column-start: 1; grid-column-end: 4; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 1.3rem;">Não foi possível capturar a entrada e saída da máquina!</p>`;
+                    }
+                    else if(resposta[0].dataSaida != null){
+                        document.querySelector('.dashboard').innerHTML = `<p style="grid-column-start: 1; grid-column-end: 4; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 1.3rem;">Máquina desligada desde o dia ${moment().utc(resposta[0].dataSaida).format("DD/MM/YYYY [às] HH:mm")}</p>`;
+                    }
+                    else{
+                        recuperarDados();
+                    }
+                });
+            }
+        });
+    };
+
+
+    function recuperarDados() {
+        fetch(`/medidas/pegarRegistroCPU?idMaquina=${idMaquina}`).then(function (res) {
+            if (res.ok) {
+                res.json().then(CPU => {
+
+                    console.log(CPU)
+                    cpuMedida = CPU.map((object) => object.valor);
+                    plotarGraficoCPU(cpuMedida);
+
+                })
+            }
+        })
+
+        fetch(`/medidas/pegarRegistroDISCO?idMaquina=${idMaquina}`).then(function (res) {
+            if (res.ok) {
+                res.json().then(DISCO => {
+
+                    // console.log(DISCO)
+                    discoMedida = DISCO.map((object) => object.valor);
+                    discoDisponivel= 100 - discoMedida[0];
+                    plotarGraficoDISCO(discoMedida);
+
+                })
+            }
+        })
+
+
+
+        fetch(`/medidas/pegarRegistroRAM?idMaquina=${idMaquina}`).then(function (res) {
+            if (res.ok) {
+                res.json().then(RAM => {
+
+                    // console.log(RAM)
+                    ramMedida = RAM.map((object) => object.valor);
+                    plotarGraficoRAM(ramMedida);
+
+                })
+            }
+        })
+
+        fetch(`/medidas/pegarRegistroFuncionario?idMaquina=${idMaquina}`).then(function (res) {
+            if (res.ok) {
+                res.json().then(RegistroFuncionario => {
+                    // console.log(RegistroFuncionario)
+
+                    var nomeFuncionario = RegistroFuncionario.map((object) => object.nome);
+                    var emailFuncionario = RegistroFuncionario.map((object) => object.email);
+                    var cargoFuncionario = RegistroFuncionario.map((object) => object.cargo);
+                    var telefoneFuncionario = RegistroFuncionario.map((object) => object.telefone);
+
+                    nome.innerHTML = nomeFuncionario;
+                    mail.innerHTML = emailFuncionario
+                    cargo.innerHTML = cargoFuncionario;
+                    telefone.innerHTML = telefoneFuncionario;
+
+                })
+            }
+        });
+
+        fetch(`/medidas/pegarRegistroMaquina?idMaquina=${idMaquina}`).then((res) => {
+            if(res.ok){
+                res.json().then((resposta) => {
+                //     <p><b>Sistema operacional: </b><span><div id="sistemaOp"></div></span></p>
+                // <p><b>Sistema operacional: </b><span><div id="nomeMaquina"></div></span></p>
+                // <p><b>Sistema operacional: </b><span><div id="tipoMaquina"></div></span></p>
+
+                    document.getElementById("tbMaquina-first").innerHTML += `<p><b>Sistema operacional: </b><span>${resposta[0].sistemaOperacional}</span></p>`;
+                    document.getElementById("tbMaquina-first").innerHTML += `<p><b>Nome da máquina: </b><span>${resposta[0].nomeMaquina}</span></p>`;
+                    document.getElementById("tbMaquina-first").innerHTML += `<p><b>Tipo da máquina: </b><span>${resposta[0].tipoMaquina}</span></p>`;
+                    // Aqui coloca o status da máquina - desligada ou ligada
+                    document.getElementById("tbMaquina-first").innerHTML += `<p><b>Status: </b><span>Ligada</span></p>`;                    
+                    console.log(resposta)
+
+                    // Aqui tem uma gambiarra pra funcionar mas é recomendavel que troque isso. Tava repetindo valores e as labels nao faziam sentido
+                    for (let index = 0; index < resposta.length; index++) {
+
+                            if(resposta[index].atributo == "CORE"){
+                                
+                                resposta[index].unidadeMedida = "";
+                                resposta[index].valor *= 1;
+                                Math.trunc(resposta[index].valor)
+                            }
+                            if(resposta[index].atributo == "THREADS"){
+                                resposta[index].unidadeMedida = "";
+                                resposta[index].valor *= 1;
+                                Math.trunc(resposta[index].valor)
+                            }
+                            document.getElementById("tbMaquina-sec").innerHTML += `<p><b>${resposta[index].tipoComponente} - ${resposta[index].atributo}: </b><span>${resposta[index].valor} ${resposta[index].unidadeMedida}</span></p>`;
+
+                    }
+                });
+            }
+        });
+
+
+    }
+
+    function plotarGraficoCPU(cpuMedida) {
+        const labels = [
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
+        ];
+
+        const data = {
+            labels: labels,
+            datasets: [{
+                //CPU
+                label: 'CPU',
+                data: cpuMedida,
+                fill: true,
+                borderColor: 'rgb(75, 192, 192)',
+               
+            }]
+        };
+
+        const config = {
+            type: 'line',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    Animation: false,
+                }
+            }
+
+        };
+
+        window.graficoCPU = new Chart(
+            document.getElementById('graficoCPU').getContext("2d"),
+            config
+
+        );
+        setTimeout(() => {
+            atualizarGraficoCPU(document.getElementById('graficoCPU').getContext("2d"), data)
+        }, tempoAtualizacao
+
+        )
+
+    }
+
+    function atualizarGraficoCPU(grafico, dados) {
+        fetch(`/medidas/pegarRegistroCPU?idMaquina=${idMaquina}`).then(function (res) {
+            if (res.ok) {
+                res.json().then(CPU => {
+                    cpuMedida = CPU.map((object) => object.valor);
+                    dados.datasets[0].data = cpuMedida
+                    window.graficoCPU.update();
+
+                    proximaAtualizacao = setTimeout(() => {
+                        atualizarGraficoCPU(grafico, dados);
+                    }, tempoAtualizacao)
+
+                })
+            }
+        })
+        // console.log("ta funcionando")
+    }
+
+    function plotarGraficoDISCO(discoMedida) {
+        const labels = [
+            'Ocupado',
+            'Livre'
+        ];
+
+        document.getElementById("div-disco").dataset.content = discoMedida[0] + "%";
+
+        const data = {
+            labels: labels,
+            datasets: [{
+                //DISCO
+                label: 'DISCO',
+                data: [discoMedida[0], discoDisponivel],
+                backgroundColor: ['#D0342C', '#00CA43'],
+                borderColor: ['#D0342C', '#00CA43'],
+                fill: true,
+
+            }]
+        };
+
+        const config = {
+            type: 'doughnut',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+
+                    Animation: false
+                }
+            }
+        };
+
+        window.graficoDISCO = new Chart(
+            document.getElementById('graficoDISCO').getContext("2d"),
+            config
+
+        );
+        setTimeout(() => {
+            atualizarGraficoDISCO(document.getElementById('graficoDISCO').getContext("2d"), data)
+        }, tempoAtualizacao
+
+        )
+
+    }
+
+    function atualizarGraficoDISCO(grafico, dados) {
+        fetch(`/medidas/pegarRegistroDISCO?idMaquina=${idMaquina}`).then(function (res) {
+            if (res.ok) {
+                res.json().then(DISCO => {
+                    discoMedida = DISCO.map((object) => object.valor);
+                    discoDisponivel = 100 - discoMedida[0];
+                    dados.datasets[0].data[0] = discoMedida;
+                    dados.datasets[0].data[1] = discoDisponivel;
+                    window.graficoDISCO.update();
+
+                    document.getElementById("div-disco").dataset.content = discoMedida[0] + "%";
+
+
+                    proximaAtualizacao = setTimeout(() => {
+                        atualizarGraficoDISCO(grafico, dados)
+                    }, tempoAtualizacao)
+
+                })
+            }
+        })
+    }
+
+    function plotarGraficoRAM(ramMedida) {
+        const labels = [
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
+        ];
+
+        const data = {
+            labels: labels,
+            datasets: [{
+                //RAM
+                label: 'RAM',
+                data: ramMedida,
+                fill: true,
+                borderColor: 'rgb(75, 192, 192)',
+            }]
+        };
+
+        const config = {
+            type: 'line',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    Animation: false,
+                },
+            }
+
+        };
+
+        window.graficoRAM = new Chart(
+            document.getElementById('graficoRAM').getContext("2d"),
+            config
+
+        );
+        setTimeout(() => {
+            atualizarGraficoRAM(document.getElementById('graficoRAM').getContext("2d"), data)
+        }, tempoAtualizacao
+
+        )
+
+    }
+
+    function atualizarGraficoRAM(grafico, dados) {
+        fetch(`/medidas/pegarRegistroRAM?idMaquina=${idMaquina}`).then(function (res) {
+            if (res.ok) {
+                res.json().then(RAM => {
+
+
+
+                    ramMedida = RAM.map((object) => object.valor);
+                    dados.datasets[0].data = ramMedida
+                    window.graficoRAM.update();
+
+                    proximaAtualizacao = setTimeout(() => {
+                        atualizarGraficoRAM(grafico, dados)
+                    }, tempoAtualizacao)
+
+                })
+            }
+        })
+        // console.log("ta funcionando")
+    }
+
+
+</script>
+<script src="./jsDash/script-dash.js"></script>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang=pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Localizacao | Point</title>
+  <link rel="stylesheet" href="css/styleDash.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+  <link
+    rel="stylesheet"
+    href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"
+  />
+  <script src="./jsDash/leaftlet.js"></script>
+  <script src="./jsDash/heatmap.js"></script>
+  <script src="./jsDash/leaflet-heat.js"></script>
+</head>
+
+<body>
+  <header>
+    <nav id="menu">
+      <a href="maquinas.html" class="logo">
+        <img src="../assets/imgs/Point.png" />
+      </a>
+      <hr />
+      <a href="funcionarios.html" class="img-nav">
+        <img src="../assets/imgs/user.png" />
+        <span>Funcionários</span>
+      </a>
+      <a href="maquinas.html" class="img-nav">
+        <img src="./assets/imgs/imac.png" />
+        <span>Máquinas</span>
+      </a>
+      <a href="instancias.html" class="img-nav">
+        <img src="assets/dash/server.png" />
+        <span>Instâncias</span>
+      </a>
+      <a href="alertas.html" class="img-nav">
+        <img src="assets/dash/alertas.png" />
+        <span>Alertas</span>
+      </a>
+      <a href="localizacao.html" class="img-nav">
+        <img src="assets/imgs/pin.png" />
+        <span>Localização</span>
+      </a>
+      <a href="configuracoes.html" class="img-nav">
+        <img src="./assets/imgs/setting.png" />
+        <span>Configurações</span>
+      </a>
+      <hr />
+      <a class="img-nav" id="sair">
+        <img src="../assets/imgs/x.png" />
+        <span>Sair</span>
+      </a>
+    </nav>
+    <nav id="menu-mobile"><img src="assets/dash/bars.svg" /></nav>
+  </header>
+  <main>
+    <div class="main-localizacao">
+      <div class="left-wid">
+        <div class="titulo">
+          <p>Localização das máquinas</p>
+        </div>
+
+        <div class="filtro">
+          <div class="dropdown">
+            <div class="select">
+              <span>Preferências</span>
+              <i class="fa fa-chevron-left"></i>
+            </div>
+            <input type="hidden" name="gender" id="new_plano"/>
+            <ul class="dropdown-menu" id="select-lista">
+              <li id="geral">Todas as Máquinas</li>
+              <li id="servidor">Servidor</li>
+              <li id="desktop">Desktop</li>
+    
+            </ul>
+          </div>
+          <button class="custom-btn btn-8" onclick="getFiltro()">
+            Filtrar
+          </button>
+        </div>
+        <div class="heatmap" id="map"></div>
+      </div>
+
+      <div class="rigth-wid">
+        
+        <div class="text">
+          <p>Lista dos Paises</p>
+        </div>
+
+        <div class="table">
+          <ul id="listaCidades"></ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="../script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+
+    //IMPORTANT: As medidas de Latitude e Longitude foram trocadas no banco então o select que pega a localizacao com lat e long é
+    // Vice versa. Então no código está tudo Trocado
+
+
+
+    // TODO: Ordenar por mais pessoas
+
+    function getFiltro(){
+      if(document.getElementById('new_plano').value != getParametro() && document.getElementById('new_plano').value != ''){
+        window.location = `./localizacao.html?filtroMapa=${document.getElementById('new_plano').value}`
+      }
+    }
+
+    function listarCidades() {
+      fetch(
+        `/mapaIvan/getCidades?idEmpresa=${sessionStorage.ID_EMPRESA}`
+      ).then(function (resposta) {
+        if (resposta.ok) {
+          resposta.json().then((resposta) => {
+
+            console.log(resposta)
+            
+            var vetorPais = []
+            for (let i = 0; i < resposta.length; i++) {
+
+              var ul = document.getElementById("select-lista");
+              var li = document.createElement("li");
+
+
+              if(!vetorPais.includes(resposta[i].pais)){
+
+                vetorPais.push(resposta[i].pais)
+                li.appendChild(document.createTextNode(resposta[i].pais));
+                li.setAttribute("id", resposta[i].pais);
+                ul.appendChild(li);  
+
+              }
+
+              // NOTE: Tive que colocar desse jeito se não o select-box não funcionava
+
+              //TODO: Agda colocar aqui o link nesse href ai
+              document.getElementById("listaCidades").innerHTML += `
+              <li><a href="analisar-funcionarios.html?cidade=${resposta[i].cidade}">
+                <p>${resposta[i].cidade}</p>
+                <p style='font-weight: bold'>${resposta[i].pais}</p>
+            </li></a>
+              `;
+
+            
+            }
+
+            
+          });
+        }
+      });
+    }
+
+    listarCidades();
+
+    // NOTE: Aqui tenho que fazer um block de if e passar o parametro
+    function pegarDadosMapa() {
+      fetch(
+        `/mapaIvan/getLocalizacao?idEmpresa=${sessionStorage.ID_EMPRESA}&filtroMapa=${getParametro()}`
+      ).then(function (resposta) {
+        if (resposta.ok) {
+          resposta.json().then((resposta) => {
+            gerarMapa(resposta);
+          });
+        }
+      });
+    }
+
+    function getParametro() {
+      const parametrosString = window.location.search;
+      const parametros = new URLSearchParams(parametrosString);
+      return parametros.get("filtroMapa");
+    }
+
+    function gerarMapa(jsonObj) {
+      // TODO: Pegar o valor máximo que a parada aparece pra deixar no max para ter um equilibrio
+
+
+      var x = getParametro();
+      var max = 1;
+      var raio = 4;
+
+      if(x == 'geral'){ 
+        max=1
+        raio=8
+      }else if(x == 'servidor'){
+        max=2
+        raio=3
+      }else if(x == 'desktop'){
+        max=2
+        raio=3
+      }else{
+        max=9
+        raio=0.08
+      }
+
+      var maximoValores = 0;
+
+      jsonObj.forEach((i) => {
+        var count = 0;
+
+        jsonObj.forEach((j) => {
+          if (
+            i["latitude"] == j["latitude"] &&
+            i["longitude"] == j["longitude"]
+          ) {
+            count++;
+          }
+
+          if (count >= maximoValores) {
+            maximoValores = count;
+          }
+        });
+      });
+
+      var testData = {
+        // Quanto mais próximo do maximo fica com red dot
+        max: maximoValores+0.5,
+        data: jsonObj,
+      };
+
+      var mediaLat = 0;
+      var mediaLng = 0;
+      tamanhoData = jsonObj.length;
+
+      for (let i = 0; i < tamanhoData; i++) {
+        mediaLat += Number(jsonObj[i]["latitude"]);
+        mediaLng += Number(jsonObj[i]["longitude"]);
+      }
+
+      mediaLat /= tamanhoData;
+      mediaLng /= tamanhoData;
+
+      var baseLayer = L.tileLayer(
+        "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+          attribution:
+            'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+          maxZoom: 15,
+        }
+      );
+
+      var cfg = {
+        radius: raio,
+
+        maxOpacity: 1,
+
+        scaleRadius: true,
+
+        useLocalExtrema: false,
+
+        latField: "longitude",
+
+        lngField: "latitude",
+
+        valueField: "count",
+      };
+
+      var heatmapLayer = new HeatmapOverlay(cfg);
+      var map = new L.Map("map", {
+        center: new L.LatLng(mediaLng, mediaLat),
+        zoom: max,
+        layers: [baseLayer, heatmapLayer],
+      });
+
+      heatmapLayer.setData(testData);
+      // make accessible for debugging
+      layer = heatmapLayer;
+    }
+
+    pegarDadosMapa();
+
+label = []
+count = []
+setTimeout(() =>{
+
+  const ctx = document.getElementById('myChart')
+
+  
+  const data = {
+  labels: label,
+  datasets: [{
+   label: 'My First Dataset',
+   data: [65, 59, 90, 81,80],
+   fill: true,
+   backgroundColor: 'rgba(255, 99, 132, 0.2)',
+   borderColor: 'rgb(255, 99, 132)',
+   pointBackgroundColor: 'rgb(255, 99, 132)',
+   pointBorderColor: '#fff',
+   pointHoverBackgroundColor: '#fff',
+   pointHoverBorderColor: 'rgb(255, 99, 132)'
+  }]
+  };
+  
+  
+  const config = {
+  type: 'bar',
+  data: data,
+  options: {
+   elements: {
+     line: {
+       borderWidth: 3
+     }
+   }
+  },
+  };
+  
+  
+  new Chart(ctx, config)
+  
+
+}, 5000)  
+
+
+</script>
+<script src="./jsDash/script-dash.js"></script>
+</body>

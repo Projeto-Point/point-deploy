@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styleLogin_Cadastro.css">
+    <title>Login | Point</title>
+</head>
+
+<body class="body_login">
+    <div id="Login" class="container">
+        <div class="login">
+
+
+            <div class="banner_login">
+                <a href="index.html">
+                    <img src="assets/imgs/arrow.png" alt="Voltar para a HOME" class="icon">
+
+                </a>
+
+                <img src="assets/imgs/Point.png" alt="Point Logo" class="img_login">
+
+                <div class="group" style="margin-top: 7%;">      
+                    <input type="text" required id="email_input"onkeypress="key()">
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    <label>E-mail</label>
+                  </div>
+
+                  <div class="group" style="margin-top: 3%;">      
+                    <input type="password" required id="senha_input"onkeypress="key()">
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    <label>Senha</label>
+                </div>
+                <a href="index.html#contato" style="color: rgba(101, 101, 101, 0.66);"><small>Esqueceu a senha? Entre em contato</small></a>
+
+                <div class="botao_login">
+                    <button class="btnEntrar custom-btn" onclick="entrar()">Entrar</button>
+                </div>
+
+                <div class="loader">
+                    <svg version="1.1"xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="40px" height="40px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+                        <path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+                            <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite" />
+                        </path>
+                    </svg>
+                </div>
+
+                <p class="alerta" id="alerta"></p>
+
+                <div class="sem_cadastro">
+                    <span class="span_text_scad">Não possui cadastro?</span> <a href="cadastro.html">Clique aqui.</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script>
+
+    function key() {
+        if (event.key === 'Enter') {
+            return entrar()
+        }
+    }
+
+    function mostrarAlerta(msg) {
+        document.querySelector('.loader').style.display = "none";
+        alerta.innerHTML = msg;
+        alerta.style.visibility = "visible";
+
+        setTimeout(() => {
+            alerta.style.visibility = "hidden";
+        }, 5000)
+
+    }
+
+    function entrar() {
+        document.querySelector('.loader').style.display = "block";
+        alerta.style.visibility = "hidden";
+
+        var emailVar = email_input.value;
+        var senhaVar = senha_input.value;
+
+        if (emailVar == "" || senhaVar == "") {
+            mostrarAlerta("Preencha todos os campos para prosseguir!")
+
+            finalizarAguardar();
+            return false;
+        }
+
+        if (emailVar.indexOf("@") == -1) {
+            mostrarAlerta("E-mail inválido! Verifique e tente novamente.")
+
+            finalizarAguardar();
+            return false;
+        }
+
+        console.log("FORM LOGIN: ", emailVar);
+        console.log("FORM SENHA: ", senhaVar);
+
+        fetch("/usuarios/autenticar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                emailServer: emailVar,
+                senhaServer: senhaVar
+            })
+        }).then(function (resposta) {
+            console.log("ESTOU NO THEN DO entrar()!")
+
+            if (resposta.ok) {
+                console.log(resposta);
+
+                resposta.json().then(json => {
+                    console.log(json);
+                    console.log(JSON.stringify(json));
+
+                    sessionStorage.EMAIL_USUARIO = json.email;
+                    sessionStorage.NOME_USUARIO = json.nome;
+                    sessionStorage.ID_USUARIO = json.idFuncionario;
+                    sessionStorage.CARGO = json.cargo;
+                    sessionStorage.ID_EMPRESA = json.fkEmpresa;
+                    sessionStorage.MAP = 1;
+
+                    setTimeout(function () {
+                        window.location = "./dashboard/funcionarios.html";
+                    }, 3300); // apenas para exibir o loading
+
+                });
+
+            } else {
+
+                console.log("Houve um erro ao tentar realizar o login!");
+                mostrarAlerta("O e-mail e a senha não coincidem!")
+                resposta.text().then(texto => {
+                    //console.error(texto);
+                    //finalizarAguardar(texto);
+                });
+            }
+
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+
+        return false;
+    }
+
+</script>

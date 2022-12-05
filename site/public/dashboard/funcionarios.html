@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Funcionários | Point</title>
+    <link rel="stylesheet" href="css/styleDash.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <header>
+        <nav id="menu">
+            <a href="maquinas.html" class="logo">
+                <img src="../assets/imgs/Point.png">
+            </a>
+            <hr>
+            <a href="funcionarios.html" class="img-nav">
+                <img src="../assets/imgs/user.png" >
+                <span>Funcionários</span>
+            </a>
+            <a href="maquinas.html" class="img-nav">
+                <img src="./assets/imgs/imac.png">
+                <span>Máquinas</span>
+            </a>
+            <a href="instancias.html" class="img-nav">
+                <img src="assets/dash/server.png">
+                <span>Instâncias</span>
+            </a>
+            <a href="alertas.html" class="img-nav">
+                <img src="assets/dash/alertas.png">
+                <span>Alertas</span>
+            </a>
+            <a href="localizacao.html?filtroMapa=geral" class="img-nav">
+                <img src="assets/imgs/pin.png">
+                <span>Localização</span>
+            </a>
+            <a href="configuracoes.html" class="img-nav">
+                <img src="./assets/imgs/setting.png">
+                <span>Configurações</span>
+            </a>
+            <hr>
+            <a class="img-nav" id="sair">
+                <img src="../assets/imgs/x.png" />
+                <span>Sair</span>
+            </a>
+        </nav>
+        <nav id="menu-mobile"><img src="assets/dash/bars.svg" /></nav>
+    </header>
+    <main>
+        <section class="funcionarios">
+            <section class="top">
+                <div class="top-esq">
+                    <a href="cadastrar-funcionario.html" class="btn-link">Cadastrar funcionário</a>
+                </div>
+                <div class="top-meio">
+                    <input id="inp-pesquisar-funcionario" type="search" placeholder="Pesquise por funcionário"
+                        onkeyup="listarFuncionarios()" />
+                </div>
+                <div class="top-dir">
+                    <p class="nome"><span id="nomeGerente"></span></p>
+                    <img src="../assets/dash/icons8-user-64.png" />
+                </div>
+            </section>
+            <div id="lista-funcionarios">
+                <div class="loader" style="display: block; grid-column: 2; grid-row: 2; justify-self: center;">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+                        y="0px" width="40px" height="40px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;"
+                        xml:space="preserve" style="fill: var(--cor3);">
+                        <path style="fill: var(--cor3);"
+                            d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+                            <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25"
+                                to="360 25 25" dur="0.6s" repeatCount="indefinite" />
+                        </path>
+                    </svg>
+                </div>
+                <!-- <div class="funcionario box">
+                    <div class="alinhamento">
+                        <h3 id="nome-funcionario">Juan Cauã Silveira</h3>
+                        <a href="alterarFunc.html">
+                            <div class="box-gear"><img src="assets/dash/gear.png" class="gear" alt=""></div>
+                        </a>
+                    </div>
+                    <p>juan@gmail.com</p>
+                    <p>(11) 98545-1265</p>
+                </div> -->
+            </div>
+        </section>
+    </main>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <!-- <script src="../script.js"></script> -->
+
+    <script>
+
+        nomeGerente.innerHTML = sessionStorage.NOME_USUARIO;
+
+    
+        function listarFuncionarios() {
+            
+
+            var pesquisaFuncionarioVar = document.getElementById(
+                "inp-pesquisar-funcionario"
+            ).value;
+
+            fetch(
+                `/usuarios/listarFuncionarios?idEmpresa=${sessionStorage.ID_EMPRESA}`
+            ).then(function (resposta) {
+                if (resposta.ok) {
+                    resposta.json().then((resposta) => {
+                        console.log(resposta);
+
+                        if(pesquisaFuncionarioVar == ''){
+                            document.getElementById("lista-funcionarios").innerHTML = ''
+                            for (let i = 0; i < resposta.length; i++) {
+                            document.getElementById("lista-funcionarios").innerHTML += `
+                        <div class="funcionario box">
+                          <div class="alinhamento">
+                             <h3 id="nome-funcionario">${resposta[i].nome}</h3>
+                             <a href="alterarFunc.html?idFuncionario=${resposta[i].idFuncionario}">
+                            <div class="box-gear"><img src="assets/dash/gear.png" class="gear" alt=""></div>
+                        </a>
+                             </div>
+                             <p>${resposta[i].cargo}</p>
+                         <p>${resposta[i].email}</p>
+                         <p>${resposta[i].telefone}</p>
+                         
+                        </div>`;
+                        }
+                
+                    }else{
+
+                        document.getElementById("lista-funcionarios").innerHTML = ''
+                        for (let i = 0; i < resposta.length; i++) {
+                            
+                            if ((resposta[i].nome).toUpperCase().indexOf(pesquisaFuncionarioVar.toUpperCase()) != -1 || (resposta[i].cargo).toUpperCase().indexOf(pesquisaFuncionarioVar.toUpperCase()) != -1){
+
+                                document.getElementById("lista-funcionarios").innerHTML += `
+                        <div class="funcionario box">
+                          <div class="alinhamento">
+                             <h3 id="nome-funcionario">${resposta[i].nome}</h3>
+                             <a href="alterarFunc.html?idFuncionario=${resposta[i].idFuncionario}">
+                            <div class="box-gear"><img src="assets/dash/gear.png" class="gear" alt=""></div>
+                        </a>
+                             </div>
+                             <p>${resposta[i].cargo}</p>
+                         <p>${resposta[i].email}</p>
+                         <p>${resposta[i].telefone}</p>
+                         
+                        </div>`;
+
+                            }
+                            
+                        }
+
+                    }
+                      
+                    });
+                }
+            });
+
+        }
+
+        listarFuncionarios()
+
+    </script>
+</body>
+
+</html>
+<script src="./jsDash/script-dash.js"></script>

@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+    text-decoration: none;
+  }
+  
+  :root {
+    --cor1: #00CA43;
+    --cor2: #00A219;
+    --cor3: #007B00;
+    --radius: 4px;
+  }
+  
+  input {
+    height: 50px;
+    border: 2px solid var(--cor3);
+    border-radius: var(--radius);
+  }
+  
+  body {
+    display: flex;
+  }
+  
+  header {
+    width: 20%;
+    max-width: 300px;
+    height: 100vh;
+  }
+  header nav {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 30px;
+  }
+  header nav .logo {
+    display: flex;
+    justify-content: center;
+  }
+  header nav .logo img {
+    width: 60%;
+    
+  }
+  header nav hr {
+    opacity: 0.5;
+    margin: 15px 0;
+  }
+  header nav a {
+    color: black;
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    font-size: 1.3rem;
+  }
+  header nav a img {
+    margin-right: 5px;
+    height: 25px;
+  }
+  
+  main {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--cor1);
+    background-image: url("../assets/dash/dash.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    color: white;
+    padding: 30px 2%;
+  }
+  main section.top {
+    display: flex;
+    justify-content: space-between;
+  }
+  main section.top .top-esq p.titulo {
+    font-size: 1.3rem;
+  }
+  main section.top .top-esq p.subtitulo {
+    font-size: 1rem;
+    color: #eee;
+  }
+  main section.top .top-meio input {
+    border: none;
+    width: 400px;
+    padding: 0 15px;
+    outline: none;
+  }
+
+  main section.dashboard {
+    height: 100%;
+    margin-top: 30px;
+    display: grid;
+    gap: 25px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-template-areas: "g1 g2 g3 t3" "t1 t1 t1 t3" "t1 t1 t1 t4" "t2 t2 t2 t4";
+   
+  }
+  main section.dashboard #gfCpu {
+    grid-area: g1;
+  }
+  main section.dashboard #gfDisco {
+    grid-area: g2;
+  }
+  main section.dashboard #gfRam {
+    grid-area: g3;
+  }

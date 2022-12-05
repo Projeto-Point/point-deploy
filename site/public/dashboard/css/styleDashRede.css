@@ -1,0 +1,942 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+  text-decoration: none;
+}
+
+:root {
+  --cor1: #13b348;
+  --cor2: #00A219;
+  --cor3: #007B00;
+  --radius: 4px;
+}
+
+::-webkit-scrollbar {
+  width: 0.3vw;
+}
+
+::-webkit-scrollbar-track {
+  scrollbar-color: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--cor3);
+  border-radius: 10px;
+}
+
+a.btn-link {
+  background: var(--cor1);
+  padding: 7px 10px;
+  border-radius: var(--radius);
+  color: white;
+  margin: 0 5px;
+}
+
+a.btn-link:hover {
+  background: var(--cor3);
+  transition: all ease 100ms;
+}
+
+input, select {
+  height: 50px;
+  border: 2px solid var(--cor3);
+  border-radius: var(--radius);
+  padding: 0 15px;
+  background: white;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: white;
+  color: black;
+  border-radius: var(--radius);
+  padding: 30px 0;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+}
+
+body {
+  display: flex;
+  overflow-x: hidden;
+}
+
+main section.funcionarios .top {
+  margin-bottom: 30px;
+}
+
+main section.funcionarios .top a {
+  background-color: rgb(255, 255, 255);
+  padding: 15px;
+  color: black;
+}
+
+main section.funcionarios .top a:hover {
+  background-color: var(--cor3);
+  border: 2px solid white;
+  color: white;
+  font-weight: bold;
+  transition: all ease-in-out 100ms;
+}
+
+main section.funcionarios #lista-funcionarios {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 50px;
+  justify-content: center;
+  font-size: 20px;
+}
+
+main section.funcionarios #lista-funcionarios .alinhamento {
+  display: flex;
+  flex-direction: row;
+}
+
+main section.funcionarios #lista-funcionarios .funcionario h3 {
+  margin-bottom: 15px;
+}
+
+main section.funcionarios #lista-funcionarios .funcionario p {
+  margin: 5px 0;
+}
+
+main section.funcionarios #lista-funcionarios .funcionario a.btn-link {
+  margin: 7px;
+}
+
+main section.funcionarios #lista-funcionarios .funcionario .box-gear {
+  height: 4vh;
+  border-width: 4px;
+  border-color: var(--cor1);
+  border-radius: var(--radius);
+}
+
+main section.funcionarios #lista-funcionarios .box-gear .gear {
+  height: 4vh;
+}
+
+header nav#menu {
+  max-width: 300px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.3);
+  padding: 10px 30px;
+}
+header nav#menu .logo {
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+}
+header nav#menu .logo img {
+  width: 60%;
+  height: auto;
+}
+header nav#menu .img-nav:hover {
+  filter: invert(38%) sepia(92%) saturate(1739%) hue-rotate(105deg) brightness(90%) contrast(103%);
+  transition: all ease-in-out 150ms;
+}
+header nav#menu .img-nav:last-child:hover {
+  filter: invert(20%) sepia(63%) saturate(1878%) hue-rotate(348deg) brightness(101%) contrast(94%);
+}
+header nav#menu hr {
+  opacity: 0.5;
+  margin: 15px 0;
+}
+header nav#menu a {
+  color: black;
+  display: flex;
+  align-items: center;
+  margin: 23px 0;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+header nav#menu a img {
+  margin-right: 15px;
+  height: 20px;
+  width: 20px;
+}
+header nav#menu-mobile {
+  position: -webkit-sticky;
+  position: sticky;
+  display: none;
+  top: 0;
+  box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.3);
+  width: 70px;
+  height: 100vh;
+  justify-content: center;
+  padding: 15px 0;
+}
+header nav#menu-mobile img {
+  width: 50px;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  cursor: pointer;
+  height: 25px;
+}
+
+main {
+  width: calc(100% - 300px);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--cor1);
+  background-image: url("../../assets/dash/dash.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  color: white;
+  padding: 30px;
+}
+main .main-localizacao {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  justify-content: space-around;
+  background: white;
+  border-radius: var(--radius);
+}
+main .main-localizacao .left-wid {
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+main .main-localizacao .left-wid .titulo {
+  font-weight: bold;
+  font-size: 1.3rem;
+  color: white;
+  background: var(--cor3);
+  padding: 10px;
+  border-radius: var(--radius);
+  margin-bottom: 0%;
+  width: 100%;
+  text-align: center;
+}
+main .main-localizacao .left-wid .texto {
+  margin-bottom: 10%;
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.82);
+  color: rgb(62, 62, 62);
+  padding: 15px;
+  border-radius: var(--radius);
+  font-weight: 600;
+}
+main .main-localizacao .left-wid .heatmap {
+  margin-top: 5%;
+  margin-bottom: 3%;
+  border-radius: var(--radius);
+  height: 60%;
+  width: 100%;
+}
+main .main-localizacao .rigth-wid {
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  border: 2px solid white;
+  align-items: center;
+}
+main .main-localizacao .rigth-wid .wordcloud {
+  border: 2px dashed red;
+  height: 40%;
+  width: 80%;
+  background: url("../assets/imgs/wordcloud.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+main .main-localizacao .rigth-wid .table {
+  height: 30%;
+  border: 2px solid var(--cor3);
+  border-radius: var(--radius);
+  width: 60%;
+  color: black;
+  list-style: none;
+  overflow-y: scroll;
+  word-break: keep-all;
+}
+main .main-localizacao .rigth-wid .table::-webkit-scrollbar {
+  width: 2px;
+}
+main .main-localizacao .rigth-wid .table ul {
+  list-style: none;
+  font-size: 1rem;
+  height: 100%;
+}
+main .main-localizacao .rigth-wid .table a {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 8px 18px;
+}
+main .main-localizacao .rigth-wid .table li:nth-child(even) {
+  background: rgba(205, 248, 205, 0.2980392157);
+}
+main section.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+main section.top .top-esq p.titulo {
+  font-size: 1.3rem;
+}
+main section.top .top-esq p.subtitulo {
+  font-size: 1rem;
+  color: #eee;
+}
+main section.top .top-esq select {
+  width: 200px;
+}
+main section.top .top-meio input {
+  border: none;
+  width: 400px;
+  outline: none;
+}
+main section.top .top-dir {
+  display: flex;
+  align-items: center;
+}
+main section.top .top-dir button {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius);
+}
+main section.top .top-dir button img {
+  width: 85%;
+  height: 85%;
+}
+main section.top .top-dir .nome {
+  margin-left: 15px;
+  margin-right: 10px;
+  font-size: 1.5rem;
+}
+main section.top .top-dir img {
+  width: 25px;
+  height: 25px;
+}
+main section#maquinas {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 50px;
+  margin-top: 30px;
+}
+main section#maquinas .box-maquina {
+  position: relative;
+}
+main section#maquinas .box-maquina img {
+  width: 50%;
+  max-width: 80px;
+  margin-bottom: 15px;
+}
+main section#maquinas .box-maquina h3 {
+  margin-bottom: 5px;
+  font-size: 1.4rem;
+}
+main section#maquinas .box-maquina .botoes {
+  margin: 15px;
+}
+main section#maquinas .box-maquina.alerta::after {
+  content: "!";
+  font-family: "Arial";
+  color: white;
+  font-size: 2.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #D0342C;
+  border: 5px solid black;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  position: absolute;
+  top: -25px;
+  right: -25px;
+}
+main section#alertas {
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) 5fr;
+  gap: 30px;
+}
+main section#alertas select {
+  width: 100%;
+}
+main section#alertas .menu-lateral {
+  display: flex;
+  flex-direction: column;
+}
+main section#alertas .menu-lateral .box {
+  padding: 15px 30px;
+  align-items: flex-start;
+  margin: 7px 0;
+}
+main section#alertas .menu-lateral .box p {
+  font-size: 1.3rem;
+}
+main section#alertas .menu-lateral .box .opcao {
+  display: grid;
+  grid-template-columns: 35px 1fr;
+  align-items: center;
+  justify-items: start;
+  margin: 5px 0;
+}
+main section#alertas .menu-lateral .box .opcao input {
+  width: 25px;
+  height: 25px;
+}
+main section#alertas .main {
+  font-size: 20px;
+}
+main section#alertas .main input {
+  margin: 7px 0;
+}
+main section#alertas .main .alerta {
+  margin: 15px 0;
+  padding: 30px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 70% 30%;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-areas: "titulo data" "info1 ." "info2 btn";
+}
+main section#alertas .main .alerta span {
+  font-weight: bold;
+}
+main section#alertas .main .alerta h3#titulo-alerta {
+  grid-area: titulo;
+}
+main section#alertas .main .alerta p#data-alerta {
+  grid-area: data;
+  text-align: right;
+  font-weight: bold;
+}
+main section#alertas .main .alerta p#resolucao-alerta {
+  grid-area: info2;
+}
+main section#alertas .main .alerta p#responsavel-alerta {
+  grid-area: info1;
+}
+main section#alertas .main .alerta a#btn-alerta {
+  grid-area: btn;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  justify-self: end;
+}
+main section.funcionarios .top {
+  margin-bottom: 30px;
+}
+main section.funcionarios .top a {
+  padding: 15px;
+}
+main section.funcionarios #lista-funcionarios {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 50px;
+  justify-content: center;
+  font-size: 20px;
+}
+main section.funcionarios #lista-funcionarios .funcionario h3 {
+  margin-bottom: 15px;
+}
+main section.funcionarios #lista-funcionarios .funcionario p {
+  margin: 5px 0;
+}
+main section.funcionarios #lista-funcionarios .funcionario a.btn-link {
+  margin: 7px;
+}
+main section.dashboard-analise {
+  margin-top: 30px;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr repeat(3, 250px);
+  grid-template-areas: "k1 k2 k3" "g1 g1 i2" "g2 g2 i2" "g3 g3 i1";
+}
+main section.dashboard-analise .kpi-horas {
+  grid-area: k1;
+}
+main section.dashboard-analise .kpi-mediaProc {
+  grid-area: k2;
+}
+main section.dashboard-analise .kpi-mediaRam {
+  grid-area: k3;
+}
+main section.dashboard-analise .grafico-processador {
+  grid-area: g1;
+}
+main section.dashboard-analise .grafico-ram {
+  grid-area: g2;
+}
+main section.dashboard-analise .grafico-disco {
+  grid-area: g3;
+}
+main section.dashboard-analise .info-funcionario {
+  grid-area: i1;
+}
+main section.dashboard-analise .info-funcionario p {
+  margin-top: 15px;
+}
+main section.dashboard-analise .info-funcionario h3 {
+  border-bottom: 2px solid var(--cor3);
+}
+main section.dashboard-analise .info-maquina {
+  grid-area: i2;
+}
+main section.dashboard-analise .info-maquina p {
+  margin-top: 7%;
+  padding-left: 9px;
+}
+main section.dashboard-analise .info-maquina h3 {
+  border-bottom: 2px solid var(--cor3);
+}
+main section.dashboard-analise .box {
+  padding: 15px;
+  display: block;
+  font-size: 20px;
+}
+main section.dashboard-analise .box-kpi h1 {
+  text-align: center;
+  font-size: 3rem;
+  margin: 15px 0;
+}
+main section.dashboard-analise .grafico .header {
+  display: flex;
+  justify-content: space-between;
+  padding: 7px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
+main section.dashboard-analise .grafico .header .dir {
+  display: flex;
+  align-items: center;
+}
+main section.dashboard-analise .grafico .header .dir .legenda {
+  width: 45px;
+  height: 25px;
+  border-radius: 5px;
+}
+main section.dashboard-analise .grafico .header .dir span {
+  margin-right: 30px;
+  margin-left: 7px;
+}
+main section.dashboard-analise .grafico .header .dir .alto {
+  background: #D0342C;
+}
+main section.dashboard-analise .grafico .header .dir .normal {
+  background: #00CA43;
+}
+main section.dashboard-analise .grafico .header select {
+  height: 30px;
+  padding-left: 10px;
+}
+main section.dashboard-analise section.dashboard-analise-funcionario {
+  margin-top: 30px;
+  display: grid;
+  gap: 30px;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr repeat(3, 250px);
+  grid-template-areas: "k1 k2 i1" "g1 g1 i1" "g2 g2 i2" "g3 g3 i2";
+}
+main section.dashboard-analise section.dashboard-analise-funcionario .kpi-horas {
+  grid-area: k1;
+}
+main section.dashboard-analise section.dashboard-analise-funcionario .kpi-qtd-func {
+  grid-area: k2;
+}
+main section.dashboard-analise section.dashboard-analise-funcionario .grafico-movimentacao {
+  grid-area: g1;
+}
+main section.dashboard-analise section.dashboard-analise-funcionario .grafico-processador {
+  grid-area: g2;
+}
+main section.dashboard-analise section.dashboard-analise-funcionario .grafico-ram {
+  grid-area: g3;
+}
+main section.dashboard-analise section.dashboard-analise-funcionario .info-funcionario {
+  grid-area: i1;
+}
+main section.dashboard-analise section.dashboard-analise-funcionario .info-maquina {
+  grid-area: i2;
+}
+main section.dashboard-analise section.dashboard-analise-funcionario .box {
+  padding: 15px;
+  display: block;
+  font-size: 20px;
+}
+main section.dashboard-analise section.dashboard-analise-funcionario .box hr {
+  margin: 10px 0;
+  opacity: 0.4;
+}
+main section.dashboard-analise section.dashboard-analise-funcionario .box-kpi h1 {
+  text-align: center;
+  font-size: 3rem;
+  margin: 15px 0;
+}
+main section.dashboard-analise section.dashboard-analise-funcionario .grafico .header {
+  display: flex;
+  justify-content: space-between;
+  padding: 7px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
+main section.dashboard-analise section.dashboard-analise-funcionario .grafico .header .dir {
+  display: flex;
+  align-items: center;
+}
+main section.dashboard-analise section.dashboard-analise-funcionario .grafico .header .dir .legenda {
+  width: 45px;
+  height: 25px;
+  border-radius: 5px;
+}
+main section.dashboard-analise section.dashboard-analise-funcionario .grafico .header .dir span {
+  margin-right: 30px;
+  margin-left: 7px;
+}
+main section.dashboard-analise section.dashboard-analise-funcionario .grafico .header .dir .alto {
+  background: #D0342C;
+}
+main section.dashboard-analise section.dashboard-analise-funcionario .grafico .header .dir .normal {
+  background: #00CA43;
+}
+main section.dashboard-analise section.dashboard-analise-funcionario .grafico .header select {
+  padding-left: 10px;
+  height: 30px;
+}
+main section.dashboard {
+  height: 100%;
+  margin-top: 20px;
+  display: grid;
+  gap: 25px;
+  font-size: 20px;
+  grid-template-columns: repeat(3, 60%);
+  grid-template-rows: repeat(3, 300px);
+  grid-template-areas: "g1 g2 g3" "t1 t1 t1" "t2 t2 t2";
+}
+main section.dashboard #gfCpu {
+  grid-area: g1;
+}
+main section.dashboard #gfDisco {
+  grid-area: g2;
+  position: relative;
+}
+main section.dashboard #gfDisco div {
+  margin: 0 auto;
+  max-height: 200px;
+}
+main section.dashboard #gfDisco div::after {
+  content: attr(data-content);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.7rem;
+}
+main section.dashboard #gfRam {
+  grid-area: g3;
+}
+main section.dashboard #tbFuncionario {
+  grid-area: t1;
+}
+main section.dashboard #tbMaquina {
+  grid-area: t2;
+}
+main section.dashboard .grafico, main section.dashboard .tabela {
+  color: black;
+  background: #eee;
+  border-radius: var(--radius);
+  padding: 15px;
+}
+main section.dashboard .grafico div, main section.dashboard .tabela div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+main section.dashboard .grafico h3, main section.dashboard .tabela h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  border-bottom: 2px solid var(--cor3);
+}
+main section.dashboard .grafico p, main section.dashboard .tabela p {
+  margin-top: 8px;
+  font-size: 1.1rem;
+}
+main section.dashboard .grafico .diver, main section.dashboard .tabela .diver {
+  background-color: var(--cor3);
+}
+main section.dashboard .grafico .container-info, main section.dashboard .tabela .container-info {
+  grid-template-columns: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+main section.dashboard .grafico .container-info .part, main section.dashboard .tabela .container-info .part {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  align-self: start;
+  place-items: flex-start;
+  padding: 5px;
+  border-right: 1px solid rgba(209, 209, 209, 0.697);
+}
+main section.dashboard .grafico .container-info .part p, main section.dashboard .tabela .container-info .part p {
+  margin-bottom: 5%;
+}
+main section.dashboard .func p {
+  margin-top: 1%;
+}
+main section.dashboard-analise-funcionario {
+  margin-top: 30px;
+  display: grid;
+  gap: 30px;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr repeat(3, 250px);
+  grid-template-areas: "k1 k2 i1" "g1 g1 i1" "g2 g2 i2" "g3 g3 i2";
+}
+main section.dashboard-analise-funcionario .kpi-horas {
+  grid-area: k1;
+}
+main section.dashboard-analise-funcionario .kpi-qtd-func {
+  grid-area: k2;
+}
+main section.dashboard-analise-funcionario .grafico-movimentacao {
+  grid-area: g1;
+}
+main section.dashboard-analise-funcionario .grafico-processador {
+  grid-area: g2;
+}
+main section.dashboard-analise-funcionario .grafico-ram {
+  grid-area: g3;
+}
+main section.dashboard-analise-funcionario .info-funcionario {
+  grid-area: i1;
+}
+main section.dashboard-analise-funcionario .box-outros-funcionarios {
+  grid-area: i2;
+  overflow-y: auto;
+}
+main section.dashboard-analise-funcionario .box {
+  padding: 15px;
+  display: block;
+  font-size: 20px;
+}
+main section.dashboard-analise-funcionario .box hr {
+  margin: 10px 0;
+  opacity: 0.4;
+}
+main section.dashboard-analise-funcionario .box-kpi h1 {
+  text-align: center;
+  font-size: 3rem;
+  margin: 15px 0;
+}
+main section.dashboard-analise-funcionario .grafico .header {
+  display: flex;
+  justify-content: space-between;
+  padding: 7px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
+main section.dashboard-analise-funcionario .grafico .header .dir {
+  display: flex;
+  align-items: center;
+}
+main section.dashboard-analise-funcionario .grafico .header .dir .legenda {
+  width: 45px;
+  height: 25px;
+  border-radius: 5px;
+}
+main section.dashboard-analise-funcionario .grafico .header .dir span {
+  margin-right: 30px;
+  margin-left: 7px;
+}
+main section.dashboard-analise-funcionario .grafico .header .dir .alto {
+  background: #D0342C;
+}
+main section.dashboard-analise-funcionario .grafico .header .dir .normal {
+  background: #00CA43;
+}
+main section.dashboard-analise-funcionario .grafico .header select {
+  height: 30px;
+  padding-left: 10px;
+}
+main section.dashboard-analise-funcionario a.funcionario {
+  padding: 10px;
+  margin: 5px;
+  color: black;
+  display: block;
+  transition-duration: 0.2s;
+  border-radius: var(--radius);
+}
+main section.dashboard-analise-funcionario a.funcionario.selecionado {
+  font-weight: bold;
+  color: var(--cor3);
+}
+main section.dashboard-analise-funcionario a.funcionario.selecionado:hover {
+  background: white;
+}
+main section.dashboard-analise-funcionario a.funcionario:hover {
+  transition-duration: 0.2s;
+  background: #eee;
+}
+
+@media screen and (max-width: 1400px) {
+  header nav#menu {
+    display: none;
+    transform: translateX(-100%);
+  }
+  header nav#menu-mobile {
+    display: flex;
+  }
+  main {
+    width: calc(100% - 70px);
+  }
+  main section.top .top-esq p.titulo {
+    display: none;
+  }
+  main section.top .top-esq p.subtitulo {
+    display: none;
+  }
+}
+@media screen and (max-width: 1200px) {
+  main section.dashboard {
+    grid-template-columns: 100%;
+    grid-template-areas: "g1" "g2" "g3" "t1" "t2";
+  }
+  main section.dashboard-analise {
+    grid-template-columns: 100%;
+    grid-template-areas: "k1" "k2" "k3" "g1" "g2" "g3" "i1" "i2";
+    grid-template-rows: auto;
+  }
+  main section.dashboard-analise .legenda + span {
+    display: none;
+  }
+  main section.dashboard-analise .legenda {
+    display: none;
+  }
+}
+@media screen and (max-width: 1100px) {
+  header nav {
+    padding: 10px 5px;
+  }
+  header nav a {
+    font-size: 1.1rem;
+  }
+  #inp-pesquisar-funcionario {
+    display: none;
+  }
+  #inp-pesquisar-maquina {
+    display: none;
+  }
+  main section.funcionarios #lista-funcionarios {
+    grid-template-columns: 1fr;
+  }
+  main section#maquinas {
+    grid-template-columns: 1fr;
+  }
+}
+svg path,
+svg rect {
+  fill: var(--cor1);
+}
+
+.loader {
+  display: none;
+}/*# sourceMappingURL=styleDash.css.map */
+
+.dashboard{
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.tempo-real-download{
+  display: flex;
+  background-color: white;
+  height: 255px;
+  width: 430px;
+  border-radius: 5px;
+  color: black;
+  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+}
+
+.tempo-real-upload{
+  display: flex;
+  background-color: white;
+  height: 255px;
+  width: 430px;
+  margin-left: 25px;
+  margin-right: -600px;
+  border-radius: 5px;
+  color: black;
+  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+}
+
+.h3Rede{
+  font-family: 23.4px "Roboto", sans-serif;
+  color: black;
+  margin-top: 15px;
+  margin-left: 15px;
+  box-sizing: border-box;
+  font: 25px bold;
+}
+
+#graficoBytesRecebidos{
+  display: flex;
+  width: 368px;
+  height: 240px;
+}
+
+@media screen and (max-width: 1200px) {
+  .dashboard{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+  }
+  
+  .tempo-real-download{
+    display: flex;
+    background-color: white;
+    height: 255px;
+    width: 1060px;
+    border-radius: 5px;
+    color: black;
+    box-shadow: 0 0 10px rgba(0,0,0,0.6);
+  }
+  
+  .tempo-real-upload{
+    display: flex;
+    background-color: white;
+    height: 255px;
+    width: 1060px;
+    border-radius: 5px;
+    color: black;
+    box-shadow: 0 0 10px rgba(0,0,0,0.6);
+    margin-top: 25px;
+    margin-left: 1px;
+    margin-right: 1px;
+
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .tempo-real-upload{
+    display: flex;
+    background-color: white;
+    height: 255px;
+    width: 300px;
+    border-radius: 5px;
+    color: black;
+    box-shadow: 0 0 10px rgba(0,0,0,0.6);
+    margin-top: 25px;
+    margin-left: 1px;
+    margin-right: 1px;
+
+  }
+}

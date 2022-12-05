@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styleLogin_Cadastro.css">
+    <title>Cadastro | Point</title>
+</head>
+
+<body id="form_cadastro">
+    <div id="cadastro" class="container">
+        <div class="cadastro">
+            <div class="banner_cadastro">
+                <a href="login.html">
+                    <img src="assets/imgs/arrow.png" alt="" class="icon">
+                </a>
+                <img src="assets/imgs/Point.png" alt="Point Logo" class="img_cadastro">
+
+
+                <span id="spnEmpresa" class="banner_cadastro">
+
+                    <div class="group">      
+                        <input type="text" required id="nomeEmpresa_input" maxlength="30" onkeypress="key2()">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>Nome Empresa</label>
+                      </div>
+                        
+                      <div class="group">      
+                        <input type="text" required id="cnpj_input" maxlength="14" onkeypress="key2()">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>CNPJ</label>
+                      </div>
+
+                      <div class="group" style="margin-top: 6%;">      
+                        <div class="dropdown">
+                            <div class="select">
+                              <span>Selecione o Plano</span>
+                              <i class="fa fa-chevron-left"></i>
+                            </div>
+                            <input type="hidden" name="gender" id="plano_input">
+                            <ul class="dropdown-menu">
+                                <li id="1">Basic</li>
+                                <li id="2">Pro</li>
+                                <li id="3">Premium</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="botao_cadastro">
+                        <button class="btnEntrar custom-btn" onclick="proximo()">Próximo</button>
+                    </div>
+                </span>
+
+                <span id="spnGerente" class="banner_cadastro" style="display: none;">
+
+
+                    <div class="group">      
+                        <input type="text" required id="nome_input" onkeypress="key()">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>Nome</label>
+                      </div>
+
+                      <div class="group">      
+                        <input type="text" required id="email_input" onkeypress="key()">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>E-mail</label>
+                      </div>
+
+
+                      <div class="group">      
+                        <input type="text" required id="telefone_input" maxlength="11" onkeypress="key()">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>Celular</label>
+                      </div>
+
+
+                      <div class="group">      
+                        <input type="text" required id="cpf_input" maxlength="11" onkeypress="key()">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>CPF</label>
+                      </div>
+
+                      <div class="group">      
+                        <input type="password" required id="senha_input" maxlength="40" onkeypress="key()">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>Senha</label>
+                      </div>
+
+                      <div class="group">      
+                        <input type="password" required id="confirmacao_senha_input" maxlength="40" onkeypress="key()">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label>Confirmaçao de senha</label>
+                      </div>
+
+
+                    <div class="botao_cadastro">
+                        <button class="custom-btn btnEntrar" onclick="cadastrar()">Cadastrar-se</button>
+                    </div>
+                </span>
+
+                <div class="loader">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                        x="0px" y="0px" width="40px" height="40px" viewBox="0 0 50 50"
+                        style="enable-background:new 0 0 50 50;" xml:space="preserve">
+                        <path fill="#000"
+                            d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+                            <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25"
+                                to="360 25 25" dur="0.6s" repeatCount="indefinite" />
+                        </path>
+                    </svg>
+                </div>
+
+                <p class="alerta" id="alerta"></p>
+
+                <div class="sem_login">
+                    <span class="span_text_scad">Já possui um cadastro?</span> <a href="login.html">Clique aqui.</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="script.js"></script>
+<script>
+
+
+    function key2() {
+        if (event.key === 'Enter') {
+            return proximo();
+        }
+    }
+
+    function key() {
+        if (event.key === 'Enter') {
+            return cadastrar();
+        }
+    }
+
+    function mostrarAlerta(msg) {
+        document.querySelector('.loader').style.display = "none";
+        alerta.innerHTML = msg;
+        alerta.style.visibility = "visible";
+
+        setTimeout(() => {
+            alerta.style.visibility = "hidden";
+        }, 5000);
+
+    }
+
+    function proximo() {
+
+        var nomeEmpresa = nomeEmpresa_input.value;
+        var cnpjVar = cnpj_input.value;
+        var planoVar = document.getElementById('plano_input').value;
+
+        if (nomeEmpresa == "" || cnpjVar == "") {
+            mostrarAlerta("Preencha todos os campos para prosseguir!");
+            return false;
+        } else if (cnpjVar != Number(cnpjVar)) {
+            mostrarAlerta("CNPJ deve conter apenas números.");
+            return false;
+        } else if (cnpjVar.length != 14) {
+            mostrarAlerta("O CNPJ deve conter 14 dígitos.");
+            return false;
+        }else if(planoVar == ''){
+            mostrarAlerta("Selecione um plano.");
+            return false;
+        }
+        else {
+            alerta.style.visibility = "hidden";
+            spnEmpresa.style.display = 'none';
+            spnGerente.style.display = 'flex';
+        }
+    }
+
+    function cadastrar() {
+        document.querySelector('.loader').style.display = "block";
+        alerta.style.visibility = "hidden";
+
+        var nomeEmpresa = nomeEmpresa_input.value;
+        var cnpjVar = cnpj_input.value;
+        var nomeGerenteVar = nome_input.value;
+        var emailVar = email_input.value;
+        var telefoneVar = telefone_input.value;
+        var cpfVar = cpf_input.value;
+        var senhaVar = senha_input.value;
+        var confirmacaoSenhaVar = confirmacao_senha_input.value;
+        var planoVar = document.getElementById('plano_input').value;
+
+
+        if (nomeGerenteVar == "" || emailVar == "" || telefoneVar == "" || senhaVar == "" || confirmacaoSenhaVar == "" || cpfVar == "") {
+            mostrarAlerta("Preencha todos os campos para prosseguir!");
+            return false;
+        }
+        if (emailVar.indexOf("@") == -1) {
+            mostrarAlerta("E-mail inválido! Verifique e tente novamente.");
+            return false;
+        } else if (cpfVar != Number(cpfVar)) {
+            mostrarAlerta("CPF deve conter apenas números.");
+            return false;
+        } else if (cpfVar.length != 11) {
+            mostrarAlerta("CPF deve conter 11 dígitos.");
+            return false;
+        } else if (senhaVar != confirmacaoSenhaVar) {
+            mostrarAlerta("As senhas inseridas devem ser iguais para prosseguir!");
+            return false;
+        }
+
+        alerta.style.visibility = "hidden";
+
+        // Enviando o valor da nova input
+        fetch("/usuarios/cadastrarEmpresaGerente", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                nomeEmpresaServer: nomeEmpresa,
+                cnpjServer: cnpjVar,
+                planoServer: planoVar,
+                nomeGerenteServer: nomeGerenteVar,
+                cpfServer: cpfVar,
+                emailServer: emailVar,
+                telefoneServer: telefoneVar,
+                senhaServer: senhaVar
+            })
+        }).then(function (resposta) {
+            console.log("resposta: ", resposta);
+            if (resposta.ok) {
+                setTimeout(() => {
+                    window.location = "login.html";
+                }, 1000)
+                limparFormulario();
+            }
+            else {
+                mostrarAlerta("Não foi possível realizar o cadastro");
+                throw ("Houve um erro ao tentar realizar o cadastro!");
+            }
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+        });
+        return false;
+    }
+</script>

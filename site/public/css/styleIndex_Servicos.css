@@ -1,0 +1,666 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+
+
+:root{
+    --cor1: #13b348;
+    --cor2: #00A219;
+    --cor3: #007B00;
+    --radius: 4px;
+}
+  *,
+  *::before,
+  *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+  }
+  
+  /* Personalizando o scrool */
+  ::-webkit-scrollbar {
+      width: 0.3vw;
+    }
+    ::-webkit-scrollbar-track {
+      scrollbar-color: none;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--cor3); 
+      border-radius: 10px;
+    }
+
+html{
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    color: #1e1e1e;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+ul {
+    list-style: none;
+}
+
+header {
+    background-color: #ffffff;
+    height: 5rem;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    width: 100vw;
+    border-bottom: 2px solid var(--cor3);
+}
+
+#PaginaServicos header {
+    padding-left: 10%;
+    padding-top: 15px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.icon {
+    width: 25px;
+}
+
+#navbar nav {
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    text-align: center;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
+   
+}
+
+ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 15px;
+}
+
+nav li {
+    text-decoration: none;
+    padding-bottom: 10px;
+    display: inline-block;
+    margin: 1rem;
+    font-weight: 500;
+    transition: transform ease-in-out 50ms;
+}
+
+nav li:active{
+    transform: scale(0.95);
+}
+
+nav li a {
+    text-decoration: none;
+    color: #1e1e1e;
+    font-size: 1.30rem;
+    transition: all ease-in-out 150ms;
+}
+
+nav li a:hover {
+    text-decoration: none;
+    color: var(--cor3);
+}
+
+nav li:last-child {
+    border: none;
+    margin-top: 1.25rem;
+}
+
+nav li:last-child:hover {
+    border: none;
+    margin-top: 1.25rem;    
+    filter: invert(38%) sepia(92%) saturate(1739%) hue-rotate(105deg) brightness(90%) contrast(103%);
+}
+
+
+
+#navbar {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.toggle {
+    visibility: visible;
+    opacity: 1;
+    border: 2px solid red;
+    height: 100vh;
+    background-color: white;
+}
+
+.logo {
+    width: 120px;
+}
+
+.icon-menu {
+    width: 25px;
+    height: 30px;
+}
+
+.icon-close {
+    width: 25px;
+    height: 30px;
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+}
+
+.icon-menu-button,
+.icon-Closemenu-button {
+    background: none;
+    border: none;
+}
+
+#banners {
+    padding-top: 5rem;
+}
+
+.service {
+    position: relative;
+    overflow: hidden;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 3px solid var(--cor3);
+}
+
+.service-containers {
+    width: 80vw;
+    display: flex;
+    flex-direction: column;
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.service-card .titulo {
+    font: 800 2rem 'Roboto';
+    display: flex;
+    align-items: center;
+}
+
+.service-card:first-child {
+    background-color: var(--cor1);
+}
+
+.service-card:nth-child(2) {
+    background-color: var(--cor3);
+
+}
+
+.service-card:last-child {
+    background-color: var(--cor2);
+}
+
+.beneficios {
+    width: 110%;
+}
+
+.service-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 350px;
+    height: 400px;
+    position: relative;
+    background-color: var(--cor2);
+    margin-top: 2rem;
+    padding: 15px;
+    gap: 1rem;
+    color: white;
+}
+
+.service-card a{
+    width: 90%;
+}
+
+.melhor {
+    width: 500;
+    height: 400;
+}
+
+.iconCrown {
+    position: absolute;
+    width: 70px;
+    right: 2rem;
+    top: -10%;
+}
+
+.card-btn {
+    padding: 10px;
+    width: 90%;
+    border: none;
+    outline: none;
+    background: #ffe100;
+    border-radius: 5px;
+    transition: 0.2s;
+    cursor: pointer;
+    color: black;
+    font-weight: 500;
+}
+
+.card-btn a {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+}
+
+.card-btn a:hover {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+}
+
+.card-btn:hover {
+    background-color: #f6ee0b;
+}
+
+.pre-btn {
+    right: 0;
+}
+
+.pre-btn img,
+.nxt-btn img {
+    width: 40px;
+}
+
+.containers {
+    width: 80vw;
+}
+
+.sobre {
+    margin-top: 2rem;
+    padding-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: justify;
+    align-items: center;
+    border-bottom: 3px solid var(--cor3);
+}
+
+.divisao {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.textoSobre {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2rem;
+    font-size: 1.05rem;
+}
+
+.textoSobre .titulos {
+    font: 800 1.5rem 'Roboto';
+}
+
+.divisao img {
+    width: 300px;
+}
+
+iframe {
+    width: 95vw;
+    margin-top: 2rem;
+}
+
+.FaleC {
+    margin-top: 2rem;
+    padding-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: justify;
+    align-items: center;
+ 
+}
+
+.conteudo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2rem;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+}
+
+form div {
+    display: flex;
+    flex-direction: column;
+}
+
+div label {
+    font: 600 1.35rem 'Roboto';
+    margin-bottom: .5rem
+}
+
+form input,
+form textarea {
+    width: 80vw;
+    max-width: 550px;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    padding: 5px 5px;
+    border: 2px solid rgba(227, 227, 227, 0.78);
+    transition-duration: 0.2s;
+    outline: none;
+}
+
+form input:focus,
+form textarea:focus {
+    border: 2px solid var(--cor2);
+    transition-duration: 0.2s;
+}
+
+form button {
+    outline: none;
+    border: none;
+    background-color: var(--cor2);
+    color: white;
+    width: 40%;
+    padding: 7px 0 7px 0;
+    margin-top: 1rem;
+    border-radius: 5px;
+    font-size: 1.2rem;
+}
+
+form button:hover {
+    background-color: var(--cor3);
+    transition: all ease-in-out 200ms;
+}
+
+
+form button:active {
+    transition: all ease-in-out 200ms;
+    transform: scale(0.95);
+}
+
+footer {
+    background: var(--cor1);
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black
+}
+
+footer .conteudo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+footer .logo {
+    width: 250px;
+    margin-top: 2rem;
+}
+
+.logo img {
+    width: 250px;
+}
+
+.contatos {
+    display: flex;
+    flex-direction: column;
+}
+
+.iconFooter {
+    width: 30px;
+    height: 30px;
+    margin-right: 15px;
+}
+
+.miniconteudo {
+    display: flex;
+    flex-direction: row;
+    font-weight: 400;
+    font-size: 1.2rem;
+    margin-bottom: .7rem;
+
+}
+
+/* --------------Serviços -----------------*/
+
+#PaginaServicos .service {
+    padding-top: 7rem;
+}
+
+#PaginaServicos .service-card .beneficios {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.tabela {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.tabela h2 {
+    margin-bottom: 2rem;
+}
+
+.corVerde {
+    color: #1e1e1e;
+}
+
+td,
+th,
+button,
+.row-header {
+    font-weight: initial;
+}
+
+thead,
+tbody {
+    text-align: center;
+}
+
+.t-white,
+button {
+    vertical-align: middle !important;
+    color: white;
+}
+
+.fa-check {
+    color: springgreen;
+}
+
+.fa-times {
+    color: red;
+}
+
+.btn a {
+    text-decoration: none;
+
+    color: white;
+}
+
+.btn a:hover {
+    color: white;
+    text-decoration: none;
+}
+
+#tabela {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+#tabela h2 {
+    margin-bottom: 2rem;
+}
+
+@media (min-width:997px) {
+    header {
+        display: block;
+    }
+
+    .header {
+        margin-left: 10%;
+    }
+
+    #PaginaServicos header {
+        padding-left: 0;
+        padding-top: 0;
+    }
+
+    .icon-close {
+        display: none;
+    }
+
+    .icon-menu {
+        display: none;
+    }
+
+    #navbar {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    #navbar nav {
+        background-color: none;
+        width: 0;
+        height: 0;
+        position: relative;
+        margin-top: 1.5rem;
+    }
+
+    .logo {
+        width: 180px;
+    }
+
+    nav ul {
+        flex-direction: row;
+    }
+
+    nav li {
+        font-size: 1.30rem;
+        padding-bottom: 22px;
+    }
+
+    .icon-menu-button {
+        display: none;
+    }
+
+    .icon-Closemenu-button {
+        display: none;
+    }
+
+    .service {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .service-containers {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .service-card {
+        margin: 1rem;
+        height: 400px;
+    }
+
+    .melhor {
+        height: 450px;
+    }
+
+    .divisao {
+        max-width: 1000px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        justify-content: space-between;
+    }
+
+    .divisao img {
+        width: 80%;
+        max-width: 300px;
+    }
+
+    form input, form textarea {
+        width: 30vw;
+    }
+
+    .formulario {
+        border-left: 3px solid var(--cor2);
+        height: 80%;
+        margin-left: 3rem;
+        padding: 3rem;
+
+    }
+
+    form {
+        margin-top: 0;
+    }
+
+    .textoSobre .titulos {
+        font-size: 1.7rem;
+    }
+
+    iframe {
+        width: 500px;
+    }
+
+    footer {
+        display: flex;
+        justify-content: center;
+        padding: 1rem;
+    }
+
+    footer .logo {
+        margin-top: 0;
+
+    }
+
+    footer .conteudo {
+
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .miniconteudo {
+        margin-top: .5rem;
+    }
+}

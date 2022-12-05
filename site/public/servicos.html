@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Serviços | Point</title>
+
+        <link rel="stylesheet" href="css/styleIndex_Servicos.css">
+
+        <!--Fontes-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
+    </head>
+
+    <body id="PaginaServicos">
+        <header>
+            <div class="containers" style="width: 80vw;">
+                <div class="header">
+                    <div class="menu">
+                        <img src="assets/imgs/Point.png" class="logo" onclick="voltarIndex()">
+                    </div>
+                    <div id="navbar">
+                        <nav>
+                            <button class="icon-Closemenu-button" onclick="fecharMenu()">
+                                <img src="assets/imgs/x.png" alt="" class="icon-close">
+                            </button>
+                            <ul>
+                                <li><a onclick="fecharMenu()" href="index.html">Home</a> </li>
+                                <li><a onclick="fecharMenu()" href="servicos.html">Serviços</a> </li>
+                                <li><a onclick="fecharMenu()" href="index.html#contato">Contato</a></li>
+                                <li> <a href="login.html"><img src="assets/imgs/user.png" class="icon"></a> </li>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <button class="icon-menu-button" onclick="abrirMenu()">
+                        <img src="assets/imgs/menu-aberto.png" alt="" class="icon-menu">
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <section class="service">
+            <h2>Serviços</h2>
+            <div class="service-containers">
+                <div class="service-card">
+                    <p class="titulo">Basic</p>
+                    <div class="beneficios">
+                        <img src="" alt="" class="icon">
+                        <p>Até 10 funcionários monitorados</p>
+                        <p>Monitoramento de hardware</p>
+                        <p>Suporte via e-mail</p>
+                    </div>
+                </div>
+                <div class="service-card melhor">
+                    <p class="titulo">Premium<img src="assets/imgs/crown.png" alt="" class="iconCrown"></p>
+                    <div class="beneficios">
+                        <img src="" alt="" class="icon">
+                        <p>Até 30 funcionários monitorados</p>
+                        <p>Monitoramento de hardware</p>
+                        <p>Análise de dados para 1 mês</p>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <p class="titulo">Pro</p>
+                    <div class="beneficios">
+                        <img src="" alt="" class="icon">
+                        <p>Até 20 funcionários monitorados</p>
+                        <p>Monitoramento de hardware</p>
+                        <p>Alertas em tempo real</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <main class="container" id="tabela">
+            <div class="row flex-column align-items-center justify-content-center" style="height: inherit;">
+                <h2>Benefícios</h2>
+                <table class="table border">
+                    <thead>
+                        <tr>
+                            <th scope="col" height="75"> </th>
+                            <th scope="col" class="t-white" style="background-color: #13b348">Basic</th>
+                            <th scope="col" class="t-white" style="background-color: #00A219">Pro</th>
+                            <th scope="col" class="t-white" style="background-color: #007B00">Premium</th>
+                        </tr>
+                    <tbody>
+                        <tr>
+                            <th scope="row" class="row-header">Monitor de hardware</th>
+                            <td><i class="fas fa-check"></i></td>
+                            <td><i class="fas fa-check"></i></td>
+                            <td><i class="fas fa-check"></i></td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="row-header">Alertas em tempo real</th>
+                            <td><i class="fas fa-times"></i></td>
+                            <td><i class="fas fa-check"></i></td>
+                            <td><i class="fas fa-check"></i></td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="row-header">Análise de dados para até 1 ano</th>
+                            <td><i class="fas fa-times"></i></td>
+                            <td><i class="fas fa-times"></i></td>
+                            <td><i class="fas fa-check"></i></td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="row-header">Quantidade de usuários</th>
+                            <td>até 10</td>
+                            <td>até 20</td>
+                            <td>até 30</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="row-header">Suporte via e-mail</th>
+                            <td><i class="fas fa-check"></i></td>
+                            <td><i class="fas fa-check"></i></td>
+                            <td><i class="fas fa-check"></i></td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="row-header"></th>
+                            <td class="px-0"><button type="button" class="btn" style="background-color: #13b348"><a href="cadastro.html">Assinar agora</a></button></td>
+                            <td class="px-0"><button type="button" class="btn" style="background-color: #00A219"><a href="cadastro.html">Assinar agora</a></button></td>
+                            <td class="px-0"><button type="button" class="btn" style="background-color: #007B00"><a href="cadastro.html">Assinar agora</a></button></td>
+                        </tr>
+                    </tbody>
+                    </thead>
+                </table>
+            </div>
+        </main>
+        <footer style="display: flex;">
+            <div class="containers">
+                <div class="conteudo">
+                    <div class="contatos">
+                        <div class="miniconteudo">
+                            <img src="assets/imgs/telefone.png" alt="" class="iconFooter">
+                            <p>+55 11 99999-8888</p>
+                        </div>
+                        <div class="miniconteudo">
+                            <img src="assets/imgs/email.png" alt="" class="iconFooter">
+                            <p>project.point@gmail.com</p>
+                        </div>
+                        <div class="miniconteudo">
+                            <img src="assets/imgs/pin.png" alt="" class="iconFooter">
+                            <p>Rua Haddock Lobo, 595</p>
+                        </div>
+                    </div>
+                    <div class="logo">
+                        <img src="assets/imgs/Pointreduzida.png" alt="">
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <script src="script.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous"></script>
+    </body>
+</html>

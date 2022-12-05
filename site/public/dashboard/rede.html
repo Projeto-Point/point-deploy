@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rede | Point</title>
+    <link rel="stylesheet" href="css/styleDashRede.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <nav id="menu">
+            <a href="maquinas.html" class="logo">
+                <img src="../assets/imgs/Point.png">
+            </a>
+            <hr>
+            <a href="funcionarios.html" class="img-nav">
+                <img src="../assets/imgs/user.png">
+                <span>Funcionários</span>
+            </a>
+            <a href="maquinas.html" class="img-nav">
+                <img src="./assets/imgs/imac.png">
+                <span>Máquinas</span>
+            </a>
+            <a href="instancias.html" class="img-nav">
+                <img src="assets/dash/server.png">
+                <span>Instâncias</span>
+            </a>
+            <a href="alertas.html" class="img-nav">
+                <img src="assets/dash/alertas.png">
+                <span>Alertas</span>
+            </a>
+            <a href="localizacao.html" class="img-nav">
+                <img src="assets/imgs/pin.png">
+                <span>Localização</span>
+            </a>
+            <a href="configuracoes.html" class="img-nav">
+                <img src="./assets/imgs/setting.png">
+                <span>Configurações</span>
+            </a>
+            <hr>
+            <a class="img-nav" id="sair">
+                <img src="../assets/imgs/x.png" />
+                <span>Sair</span>
+            </a>
+        </nav>
+        <nav id="menu-mobile"><img src="assets/dash/bars.svg" /></nav>
+    </header>
+    <main>
+        <section class="top">
+            <div class="top-esq">
+                <p class="titulo">Olá, <span id="nome_gerente"></span></p>
+                <p class="subtitulo">17/10/2022</p>
+            </div>
+            <div class="top-meio" style="visibility: hidden">
+                <input id="inp-pesquisar-funcionario" type="search"
+                    placeholder="Pesquise o nome de um funcionário..." />
+            </div>
+            <div class="top-dir">
+                <p class="nome"><span id="nomeGerente"></span></p>
+                <img src="../assets/dash/icons8-user-64.png" />
+            </div>
+        </section>
+        <section class="dashboard-analise">
+            <div class="box box-kpi kpi-horas">
+                <h3>Média de Download:</h3>
+                <p id="kpiDownload">GB</p>
+            </div>
+            <div class="box box-kpi kpi-mediaProc">
+                <h3>Média de Upload:</h3>
+                <p id="kpiUpload">GB</p>
+            </div>
+            <div class="box box-kpi kpi-mediaRam">
+                <h3>Funcionario:</h3>
+                <p id="nomeFuncionario"></p>
+            </div>
+
+            <div class="dashboard">
+                <div class="tempo-real-download" id="gfCpu">
+                    <div> <canvas id="graficoBytesRecebidos" style="position: relative;"></canvas></div>
+                </div>
+                <div class="tempo-real-upload" id="gfRam">
+                    <canvas id="graficoBytesEnviados" style="position: relative;"></canvas>
+                </div>
+            </div>
+            <div class="grafico-ram grafico box">
+                <div class="header">
+                    <h3>Download</h3>
+                    <div class="dir">
+                        <div class="legenda alto"></div>
+                        <span>Maior 4 GB</span>
+                        <div class="legenda normal"></div>
+                        <span>Menor 4 GB</span>
+                        <select id="tempoDown" onchange="mudarTempo(this.value)">
+                            <option value="ultimoMes">Último mês</option>
+                            <option value="ultimaSemana">Última semana</option>
+                            <option value="ultimoAno">Último ano</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="main-grafico">
+                    <canvas id="graficoAnaliseRecebidos"></canvas>
+                </div>
+            </div>
+
+            <div class="grafico-disco grafico box">
+                <div class="header">
+                    <h3>Upload</h3>
+                    <div class="dir">
+                        <div class="legenda alto"></div>
+                        <span>Maior 1 GB</span>
+                        <div class="legenda normal"></div>
+                        <span>Menor 1 GB</span>
+                        <select id="tempoUp" onchange="mudarTempo2(this.value)">
+                            <option value="ultimoMes">Último mês</option>
+                            <option value="ultimaSemana">Última semana</option>
+                            <option value="ultimoAno">Último ano</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="main-grafico">
+                    <canvas id="graficoAnaliseEnviados"></canvas>
+                </div>
+            </div>
+
+            <div class="box info-funcionario" id="sobreFuncionario" >
+                <h3>Sobre o funcionário</h3>
+            </div>
+            <div class="box info-maquina" id="sobreMaquina" id="sobreFuncionario">
+                <h3>Sobre a máquina</h3>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="../script.js"></script>
+<script>
+    nomeGerente.innerHTML = sessionStorage.NOME_USUARIO;
+    nome_gerente.innerHTML = sessionStorage.NOME_USUARIO;
+
+    const parametrosString = window.location.search;
+    const parametros = new URLSearchParams(parametrosString);
+    const idMaquina = Number(parametros.get("idMaquina"));
+
+    const tempoAtualizacao = 10 * 1000;
+    var gerente = sessionStorage.NOME_USUARIO
+
+    var proximaAtualizacao;
+
+    var downMedida = [];
+    var upMedida = [];
+
+    fetch(`/medidas/pegarRegistroMaquina?idMaquina=${idMaquina}`).then((res) => {
+        if (res.ok) {
+            res.json().then((resposta) => {
+                document.getElementById(
+                    "sobreMaquina"
+                ).innerHTML += `<p><b>Sistema operacional: </b><span>${resposta[0].sistemaOperacional}</span></p>`;
+                document.getElementById(
+                    "sobreMaquina"
+                ).innerHTML += `<p><b>Nome da máquina: </b><span>${resposta[0].nomeMaquina}</span></p>`;
+                document.getElementById(
+                    "sobreMaquina"
+                ).innerHTML += `<p><b>Tipo da máquina: </b><span>${resposta[0].tipoMaquina}</span></p>`;
+
+            });
+        }
+    });
+
+    fetch(`/medidas/pegarRegistroFuncionario?idMaquina=${idMaquina}`).then(
+        function (res) {
+            if (res.ok) {
+                res.json().then((resposta) => {
+                    nomeFuncionario.innerHTML += `<p><b>Nome: </b>${resposta[0].nome}</p>`;
+                    sobreFuncionario.innerHTML += `<p><b>Cargo: </b>${resposta[0].cargo}</p>`;
+                    sobreFuncionario.innerHTML += `<p><b>E-mail: </b>${resposta[0].email}</p>`;
+                    sobreFuncionario.innerHTML += `<p><b>Telefone: </b>${resposta[0].telefone}</p>`;
+                });
+            }
+        }
+    );
+
+    fetch(`/maquinas/pegarKpisRede?idMaquina=${idMaquina}&dataInicio=${moment().subtract(30, "days").format("YYYY-MM-DD")}&dataFinal=${moment().format("YYYY-MM-DD")}`)
+        .then((res) => {
+            if (res.ok) {
+                res.json().then((resposta) => {
+                    console.log(resposta)
+                    kpiDownload.innerHTML = resposta[0].mediaDownload + " GB";
+                    kpiUpload.innerHTML = resposta[0].mediaUpload + " GB";
+                });
+            }
+        })
+        .catch((erro) => {
+            console.log("Erro ao acessar /maquinas/pegarKpisRede");
+            console.log(erro);
+        });
+    var chartDown = null;
+    var chartUp = null;
+
+    mudarTempo(tempoDown.value);
+    mudarTempo2(tempoUp.value);
+
+    function mudarTempo(tempo) {
+        if (chartDown != null) {
+            chartDown.destroy();
+        }
+
+        tipoVisualizacao = "dia";
+        if (tempo == "ultimaSemana") {
+            tempo = moment().subtract(7, "days");
+        }
+        else if (tempo == "ultimoMes") {
+            tempo = moment().subtract(30, "days");
+        }
+        else {
+            tipoVisualizacao = "mes";
+            tempo = moment().subtract(1, "years");
+        }
+        pegarRegistros('graficoAnaliseRecebidos', idMaquina, tempo.format("YYYY-MM-DD"), moment().format("YYYY-MM-DD"), tipoVisualizacao);
+    }
+
+
+
+    function pegarRegistros2(idGrafico2, idMaquina, dataInicio, dataFinal, tipoVisualizacao) {
+        fetch(`/maquinas/analiseBytes2?idMaquina=${idMaquina}&dataInicio=${dataInicio}&dataFinal=${dataFinal}&tipoVisualizacao=${tipoVisualizacao}`)
+            .then((res) => {
+                if (res.ok) {
+                    res.json().then((resposta) => {
+                        console.log(resposta);
+                        let labels = [];
+
+                        if (tipoVisualizacao == "dia") {
+                            labels = resposta.map((rede) =>
+                                moment.utc(rede.dataEhora).format("DD/MM/YYYY")
+                            );
+                        }
+                        else {
+                            labels = resposta.map((rede) =>
+                                moment().month(rede.dataEhora - 1).format("MMM").charAt(0).toUpperCase() + moment().month(rede.dataEhora - 1).format("MMM").slice(1)
+                            );
+                        }
+
+                        const data = {
+                            labels: labels,
+                            datasets: [
+                                {
+                                    label: "Valor médio",
+                                    backgroundColor: [],
+                                    data: resposta.map((rede) => rede.media),
+                                },
+                            ],
+                        };
+
+                        for (let index = 0; index < resposta.length; index++) {
+                            if (resposta[index].media >= 1) {
+                                data.datasets[0].backgroundColor.push("#D0342C");
+                            } else {
+                                data.datasets[0].backgroundColor.push("#00CA43");
+                            }
+
+
+
+                        }
+
+                        const config = {
+                            type: "bar",
+                            data: data,
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                    },
+                                },
+                                plugins: {
+                                    legend: {
+                                        display: false,
+                                    },
+                                },
+                            },
+                        };
+
+                        chartUp = new Chart(document.getElementById(idGrafico2), config);
+
+                    });
+                } else {
+                    console.log("Erro ao conseguir os resultados!");
+                }
+            })
+            .catch((erro) => {
+                console.log("Erro ao acessar /maquinas/analiseBytes2");
+            });
+    }
+
+    function mudarTempo2(tempo) {
+        if (chartUp != null) {
+            chartUp.destroy();
+        }
+
+        tipoVisualizacao = "dia";
+        if (tempo == "ultimaSemana") {
+            tempo = moment().subtract(7, "days");
+        }
+        else if (tempo == "ultimoMes") {
+            tempo = moment().subtract(30, "days");
+        }
+        else {
+            tipoVisualizacao = "mes";
+            tempo = moment().subtract(1, "years");
+        }
+        pegarRegistros2('graficoAnaliseEnviados', idMaquina, tempo.format("YYYY-MM-DD"), moment().format("YYYY-MM-DD"), tipoVisualizacao);
+    }
+
+    function pegarRegistros(idGrafico, idMaquina, dataInicio, dataFinal, tipoVisualizacao) {
+        fetch(`/maquinas/analiseBytes?idMaquina=${idMaquina}&dataInicio=${dataInicio}&dataFinal=${dataFinal}&tipoVisualizacao=${tipoVisualizacao}`)
+            .then((res) => {
+                if (res.ok) {
+                    res.json().then((resposta) => {
+                        console.log(resposta);
+                        let labels = [];
+
+                        if (tipoVisualizacao == "dia") {
+                            labels = resposta.map((rede) =>
+                                moment.utc(rede.dataEhora).format("DD/MM/YYYY")
+                            );
+                        }
+                        else {
+                            labels = resposta.map((rede) =>
+                                moment().month(rede.dataEhora - 1).format("MMM").charAt(0).toUpperCase() + moment().month(rede.dataEhora - 1).format("MMM").slice(1)
+                            );
+                        }
+
+                        const data = {
+                            labels: labels,
+                            datasets: [
+                                {
+                                    label: "Valor médio",
+                                    backgroundColor: [],
+                                    data: resposta.map((rede) => rede.media),
+                                },
+                            ],
+                        };
+
+                        for (let index = 0; index < resposta.length; index++) {
+                            if (resposta[index].media >= 4) {
+                                data.datasets[0].backgroundColor.push("#D0342C");
+                            } else {
+                                data.datasets[0].backgroundColor.push("#00CA43");
+                            }
+
+
+
+                        }
+
+                        const config = {
+                            type: "bar",
+                            data: data,
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                    },
+                                },
+                                plugins: {
+                                    legend: {
+                                        display: false,
+                                    },
+                                },
+                            },
+                        };
+
+                        chartDown = new Chart(document.getElementById(idGrafico), config);
+
+                    });
+                } else {
+                    console.log("Erro ao conseguir os resultados!");
+                }
+            })
+            .catch((erro) => {
+                console.log("Erro ao acessar /maquinas/analiseBytes");
+            });
+    }
+
+
+    window.onload = () => {
+        const parametrosString = window.location.search;
+        const parametros = new URLSearchParams(parametrosString);
+
+
+
+        recuperarDados();
+    };
+
+
+    function recuperarDados() {
+        fetch(`/medidas/pegarRegistroDownload?idMaquina=${idMaquina}`).then(function (res) {
+            if (res.ok) {
+                res.json().then(Download => {
+                    console.log(Download)
+
+
+                    downMedida = Download.map((object) => object.bytesRecebidos);
+                    plotarGraficoDownload(downMedida);
+
+
+                })
+            }
+        })
+
+        fetch(`/medidas/pegarRegistroUpload?idMaquina=${idMaquina}`).then(function (res) {
+            if (res.ok) {
+                res.json().then(Upload => {
+
+                    upMedida = Upload.map((object) => object.bytesEnviados);
+                    plotarGraficoUpload(upMedida);
+
+                })
+            }
+        })
+    }
+
+    function plotarGraficoDownload(downMedida) {
+        const labels = [
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
+        ];
+
+        const data = {
+            labels: labels,
+            datasets: [{
+                //download
+                label: 'Download',
+                data: downMedida,
+                fill: true,
+                borderColor: 'rgb(75, 192, 192)',
+
+            }]
+        };
+
+        console.log(downMedida)
+
+        const config = {
+            type: 'line',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    Animation: false,
+                    title: {
+                        display: true,
+                        text: 'Download'
+                    }
+                }
+
+            }
+
+        };
+
+        window.graficoBytesRecebidos = new Chart(
+            document.getElementById('graficoBytesRecebidos').getContext("2d"),
+            config
+
+        );
+        setTimeout(() => {
+            atualizarGraficoDownload(document.getElementById('graficoBytesRecebidos').getContext("2d"), data)
+        }, tempoAtualizacao
+
+        )
+
+    }
+
+    function atualizarGraficoDownload(grafico, dados) {
+        fetch(`/medidas/pegarRegistroDownload?idMaquina=${idMaquina}`).then(function (res) {
+            if (res.ok) {
+                res.json().then(Download => {
+                    downMedida = Download.map((object) => object.bytesRecebidos);
+                    dados.datasets[0].data = downMedida
+                    window.graficoBytesRecebidos.update();
+
+                    proximaAtualizacao = setTimeout(() => {
+                        atualizarGraficoDownload(grafico, dados);
+                    }, tempoAtualizacao)
+
+                })
+            }
+        })
+
+    }
+    function plotarGraficoUpload(upMedida) {
+        const labels = [
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
+        ];
+
+        const data = {
+            labels: labels,
+            datasets: [{
+                //Upload
+                label: 'Upload',
+                data: upMedida,
+                fill: true,
+                borderColor: 'rgb(75, 192, 192)',
+            }]
+        };
+
+        const config = {
+            type: 'line',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    Animation: false,
+                    title: {
+                        display: true,
+                        text: 'Download'
+                    }
+                },
+            }
+
+        };
+
+        window.graficoBytesEnviados = new Chart(
+            document.getElementById('graficoBytesEnviados').getContext("2d"),
+            config
+
+        );
+        setTimeout(() => {
+            atualizarGraficoUpload(document.getElementById('graficoBytesEnviados').getContext("2d"), data)
+        }, tempoAtualizacao
+
+        )
+
+    }
+
+    function atualizarGraficoUpload(grafico, dados) {
+        fetch(`/medidas/pegarRegistroUpload?idMaquina=${idMaquina}`).then(function (res) {
+            if (res.ok) {
+                res.json().then(Upload => {
+
+
+
+                    upMedida = Upload.map((object) => object.bytesEnviados);
+                    dados.datasets[0].data = upMedida
+                    window.graficoBytesEnviados.update();
+
+                    proximaAtualizacao = setTimeout(() => {
+                        atualizarGraficoUpload(grafico, dados)
+                    }, tempoAtualizacao)
+
+                })
+            }
+        })
+
+    }
+
+
+
+</script>
+<script src="./jsDash/script-dash.js"></script>

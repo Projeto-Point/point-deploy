@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instâncias | Point</title>
+    <link rel="stylesheet" href="css/styleDash.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <header>
+        <nav id="menu">
+            <a href="maquinas.html" class="logo">
+                <img src="../assets/imgs/Point.png">
+            </a>
+            <hr>
+            <a href="funcionarios.html" class="img-nav">
+                <img src="../assets/imgs/user.png" >
+                <span>Funcionários</span>
+            </a>
+            <a href="maquinas.html" class="img-nav">
+                <img src="./assets/imgs/imac.png">
+                <span>Máquinas</span>
+            </a>
+            <a href="instancias.html" class="img-nav">
+                <img src="assets/dash/server.png">
+                <span>Instâncias</span>
+            </a>
+            <a href="alertas.html" class="img-nav">
+                <img src="assets/dash/alertas.png">
+                <span>Alertas</span>
+            </a>
+            <a href="localizacao.html?filtroMapa=geral" class="img-nav">
+                <img src="assets/imgs/pin.png">
+                <span>Localização</span>
+            </a>
+            <a href="configuracoes.html" class="img-nav">
+                <img src="./assets/imgs/setting.png">
+                <span>Configurações</span>
+            </a>
+            <hr>
+            <a class="img-nav" id="sair">
+                <img src="../assets/imgs/x.png" />
+                <span>Sair</span>
+            </a>
+        </nav>
+        <nav id="menu-mobile"><img src="assets/dash/bars.svg"></nav>
+    </header>
+    <main>
+        <section class="top">
+            <div class="top-esq">
+                <label for="ordenarPor">Ordenar por:</label>
+                <select id="ordenarPor" onchange="listar()">
+                    <option value="alerta">Estado de alerta</option>
+                    <option value="maquina">Nome da máquina</option>
+                    <option value="funcionario">Nome do funcionário</option>
+                </select>
+            </div>
+            <div class="top-dir">
+
+                <p class="nome"><span id="nomeGerente"></span></p>
+                <img src="../assets/dash/icons8-user-64.png">
+            </div>
+        </section>
+        <section id="maquinas">
+            <!-- <div class="box-maquina alerta">
+                    <img src="../assets/dash/computer.png">
+                    <h3>Manoel Ferreira</h3>
+                    <p>UBUNTU 1345</p>
+                    <div class="botoes">
+                        <a href="tempo-real.html?idMaquina=1">Tempo real</a>
+                        <a href="analise.html?idMaquina=1">Analisar</a>
+                        <a class="btn-link" href="analise.html?idMaquina=${resposta[maquina].idMaquina}">Analisar</a>
+                    </div>
+                </div> -->
+ 
+        </section>
+
+    </main>
+</body>
+</html>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="../script.js"></script>
+<script>
+    nomeGerente.innerHTML = sessionStorage.NOME_USUARIO;
+    // TO DO: incluir máquinas com alertas, verificar se é computador ou servidor
+    function listar(){
+        fetch(`/maquinas/listar?idEmpresa=${sessionStorage.ID_EMPRESA}&ordenarPor=${ordenarPor.value}`).then(function (res) {
+            if (res.ok) {
+                res.json().then(resposta => {
+                    var lista = document.querySelector("#maquinas");
+                    lista.innerHTML = "";
+                    console.log(resposta);
+                    for (let maquina = 0; maquina < resposta.length; maquina++) {
+                        if (resposta[maquina].tipo == 'Servidor') {
+                            lista.innerHTML += `<div class="box box-maquina">
+                                    <img src="assets/dash/instancia.png">
+                                <h3>${resposta[maquina].nome}</h3>
+                                <p>${resposta[maquina].nomeMaquina}</p>
+                                <div class="botoes">
+                                    <a class="btn-link" href="tempo-real.html?idMaquina=${resposta[maquina].idMaquina}">Tempo real</a>
+                                    <a class="btn-link" href="analise.html?idMaquina=${resposta[maquina].idMaquina}">Analisar</a>
+                                    
+                                    <a class="btn-link" href="custos.html?idMaquina=${resposta[maquina].idMaquina}">Custos</a>
+                                    <a class="btn-link" href="rede.html?idMaquina=${resposta[maquina].idMaquina}">Rede</a>
+                                    <a class="btn-link" href="processos.html?idMaquina=${resposta[maquina].idMaquina}">Processos</a>
+                                </div>
+                            </div>`;
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    listar();
+</script>
+<script src="./jsDash/script-dash.js"></script>

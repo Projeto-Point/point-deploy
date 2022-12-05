@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar funcionarios | Point</title>
+    <link rel="stylesheet" href="css/styleDashAlterFunc.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <header>
+        <nav id="menu">
+            <a href="maquinas.html" class="logo">
+                <img src="../assets/imgs/Point.png">
+            </a>
+            <hr>
+            <a href="funcionarios.html" class="img-nav">
+                <img src="../assets/imgs/user.png" >
+                <span>Funcionários</span>
+            </a>
+            <a href="maquinas.html" class="img-nav">
+                <img src="./assets/imgs/imac.png">
+                <span>Máquinas</span>
+            </a>
+            <a href="instancias.html" class="img-nav">
+                <img src="assets/dash/server.png">
+                <span>Instâncias</span>
+            </a>
+            <a href="alertas.html" class="img-nav">
+                <img src="assets/dash/alertas.png">
+                <span>Alertas</span>
+            </a>
+            <a href="localizacao.html?filtroMapa=geral" class="img-nav">
+                <img src="assets/imgs/pin.png">
+                <span>Localização</span>
+            </a>
+            <a href="configuracoes.html" class="img-nav">
+                <img src="./assets/imgs/setting.png">
+                <span>Configurações</span>
+            </a>
+            <hr>
+            <a class="img-nav" id="sair">
+                <img src="../assets/imgs/x.png" />
+                <span>Sair</span>
+            </a>
+        </nav>
+        <nav id="menu-mobile"><img src="assets/dash/bars.svg"></nav>
+    </header>
+    <main>
+        <section class="funcionarios">
+            <section class="top">
+                <div class="top-meio">
+                    <input style="visibility: hidden;" id="inp-pesquisar-funcionario" type="search"
+                        placeholder="Pesquise por funcionário">
+                </div>
+                <div class="top-dir">
+
+                    <p class="nome"><span id="nomeGerente"></span></p>
+                    <img src="../assets/dash/icons8-user-64.png">
+                </div>
+            </section>
+
+            <section class="under">
+                <section class="cad_func">
+
+
+                    <div class="titulo">
+                        <h1>Atualizar Empresa</h1>
+                    </div>
+
+                    <div class="formulario">
+                        <div class="box_cad">
+                            <div class="inputs">
+                                <span class="span_text">Nome atual:</span> <br />
+                                <div class="atual"><span id="nome_atual"></span></div>
+                            </div>
+
+                            <div class="inputs">
+                                <span class="span_text">CNPJ atual:</span> <br />
+                                <div class="atual"><span id="cnpj_atual"></span></div>
+                            </div>
+
+                            <div class="inputs">
+                                <span class="span_text">Plano atual:</span> <br />
+                                <div class="atual"><span id="plano_atual"></span></div>
+                            </div>
+
+                            <div class="inputs">
+                                <span class="span_text">Quantidade Funcionários:</span> <br />
+                                <div class="atual"><span id="qtd_atual"></span></div>
+                            </div>
+
+                        </div>
+                        <div class="linha"></div>
+                        <div class="box_cad">
+                            <div class="inputs">
+                                <span class="span_text">Novo Nome:</span> <br />
+                                <input class="input" id="newNome_input" placeholder="Insira novo nome" />
+                            </div>
+
+                            <div class="inputs">
+                                <span class="span_text">Alterar plano:</span> <br />
+                                <div class="dropdown">
+                                    <div class="select">
+                                        <span>Mantenha plano</span>
+                                        <i class="fa fa-chevron-left"></i>
+                                    </div>
+                                    <input type="hidden" name="gender" id="new_plano">
+                                    <ul class="dropdown-menu">
+                                        <li id="3">Basic</li>
+                                        <li id="2">Pro</li>
+                                        <li id="1">Premium</li>
+                                    </ul>
+                                </div>
+                                <a href="../servicos.html#tabela"><small>Saiba mais...</small></a>
+                            </div>
+
+                            <div class="inputs">
+                                <button class="custom-btn btn-8" onclick="addFuncionario()">Adicionar
+                                    Funcionário</button>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="inputs" style="margin-top: 2%;">
+                        <span class="span_text">Senha gerente:</span> <br />
+                        <input class="input_senhaGerente" type="password" id="senhaGerente_input"
+                            placeholder="Senha do gerente" />
+                    </div>
+
+                    <div class="botao_cadastro">
+                        <button class="custom-btn btnEntrar" onclick="atualizarDadosEmpresa()">
+                            Salvar
+                        </button>
+                    </div>
+
+                    <div class="loader">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            x="0px" y="0px" width="40px" height="40px" viewBox="0 0 50 50"
+                            style="enable-background:new 0 0 50 50;" xml:space="preserve">
+                            <path fill="#000"
+                                d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+                                <animateTransform attributeType="xml" attributeName="transform" type="rotate"
+                                    from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite" />
+                            </path>
+                        </svg>
+                    </div>
+
+                </section>
+            </section>
+
+        </section>
+    </main>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="../script.js"></script>
+
+    <script>
+
+        nomeGerente.innerHTML = sessionStorage.NOME_USUARIO;
+        idEmpresa = sessionStorage.ID_EMPRESA;
+        var plano;
+        var senhaGestor;
+
+        fetch(`/usuarios/getSenhaGestor?idFuncionario=${sessionStorage.ID_USUARIO}`).then(
+                function (res) {
+                    if (res.ok) {
+                        (res.json().then((senha)=>{
+                            senhaGestor = senha[0].senha
+                        }))
+                    }
+                }
+                );
+            
+
+            function charIsLetter(char) {
+                if (typeof char !== 'string') {
+                    return false;
+                }
+                return /^[a-zA-Z]+$/.test(char);
+            }
+            
+
+
+        function dadosAtuaisEmpresa() {
+
+            fetch(`/usuarios/pegarDadosAtuaisEmpresa?idEmpresa=${idEmpresa}`).then(
+                function (res) {
+                    if (res.ok) {
+                        res.json().then((registroEmpresa) => {
+                            // Os planos são (1 - Basic) (2 - Pro) (3 - Premium)
+                            switch (plano_atual.innerHTML = registroEmpresa[0].plano) {
+                                case 1:
+                                    plano_atual.innerHTML = "Basic"
+                                    plano = 1
+                                    break;
+                                case 2:
+                                    plano_atual.innerHTML = "Pro"
+                                    plano = 2
+                                    break;
+                                case 3:
+                                    plano = 3
+                                    plano_atual.innerHTML = "Premium"
+                                    break;
+                                default:
+                                    // Como a gente não estava setando o valor do plano coloquei um aleatorio só pra preencher
+                                    plano = Math.ceil(Math.random() * (3-1) + 1);
+                                    plano_atual.innerHTML = "Premium"
+                                    break;
+                            }
+
+                            console.log(registroEmpresa);
+                            newNome_input.value = registroEmpresa[0].nome;
+                            nome_atual.innerHTML = registroEmpresa[0].nome;
+                            cnpj_atual.innerHTML = registroEmpresa[0].cnpj;
+                            qtd_atual.innerHTML = registroEmpresa.length;
+                        });
+                    }
+                }
+            );
+
+        }
+
+        dadosAtuaisEmpresa()
+
+
+        function addFuncionario() {
+            window.location = './cadastrar-funcionario.html';
+        }
+
+        function atualizarDadosEmpresa() {
+
+            // Validacões 
+            var novoNomeEmpresa = document.getElementById('newNome_input').value;
+            var novoPlano = document.getElementById('new_plano').value;
+            var senhaGerente = document.getElementById('senhaGerente_input').value;
+
+            if (!charIsLetter(novoNomeEmpresa)) {
+                alert("Nome da empresa está inválido")
+                console.log(senhaGestor)
+            }else if(senhaGerente == ''){
+                alert("Campo de senha deve ser preenchido")    
+            }
+            else if (senhaGerente != senhaGestor) {
+                alert("Senha inválida")
+            }else{
+
+                if(novoPlano == ''){
+                    novoPlano = plano;
+                }
+     
+            fetch(`/usuarios/alterarEmpresa?idEmpresa=${idEmpresa}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        // crie um atributo que recebe o valor recuperado aqui
+                        // Agora vá para o arquivo routes/usuario.js
+                        novoNomeEmpresaServer: novoNomeEmpresa,
+                        novoPlanoServer : novoPlano,
+                    }),
+                })
+                    .then(function (resposta) {
+                        console.log("resposta: ", resposta);
+                        if (resposta.ok) {
+                            document.querySelector('.loader').style.display = "block";
+                            setTimeout(() => {
+                                location. reload()
+                            }, 1500);
+                        } else {
+                            alert("Não foi possível mudar as informações");
+                            throw "Houve um erro ao tentar realizar o cadastro!";
+                        }
+                    })
+                    .catch(function (resposta) {
+                        console.log(`#ERRO: ${resposta}`);
+                    });
+
+            }
+        }
+    </script>
+    <script src="./jsDash/script-dash.js"></script>

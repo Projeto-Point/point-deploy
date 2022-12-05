@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Análise de máquina | Point</title>
+  <link rel="stylesheet" href="css/styleDashCustos.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <nav id="menu">
+      <a href="maquinas.html" class="logo">
+        <img src="../assets/imgs/Point.png">
+      </a>
+      <hr>
+      <a href="funcionarios.html" class="img-nav">
+        <img src="../assets/imgs/user.png">
+        <span>Funcionários</span>
+      </a>
+      <a href="maquinas.html" class="img-nav">
+        <img src="./assets/imgs/imac.png">
+        <span>Máquinas</span>
+      </a>
+      <a href="instancias.html" class="img-nav">
+        <img src="assets/dash/server.png">
+        <span>Instâncias</span>
+      </a>
+      <a href="alertas.html" class="img-nav">
+        <img src="assets/dash/alertas.png">
+        <span>Alertas</span>
+      </a>
+      <a href="localizacao.html?filtroMapa=geral" class="img-nav">
+        <img src="assets/imgs/pin.png">
+        <span>Localização</span>
+      </a>
+      <a href="configuracoes.html" class="img-nav">
+        <img src="./assets/imgs/setting.png">
+        <span>Configurações</span>
+      </a>
+      <hr>
+      <a class="img-nav" id="sair">
+        <img src="../assets/imgs/x.png" />
+        <span>Sair</span>
+      </a>
+    </nav>
+    <nav id="menu-mobile"><img src="assets/dash/bars.svg" /></nav>
+  </header>
+  <main>
+    <section class="top">
+      <div class="top-esq">
+        <p class="titulo">Olá, <span id="nome_gerente"></span></p>
+        <p class="subtitulo">17/10/2022</p>
+      </div>
+      <div class="top-meio" style="visibility: hidden">
+        <input id="inp-pesquisar-funcionario" type="search" placeholder="Pesquise o nome de um funcionário..." />
+      </div>
+      <div class="top-dir">
+        <p class="nome"><span id="nomeGerente"></span></p>
+        <img src="../assets/dash/icons8-user-64.png" />
+      </div>
+    </section>
+    <section class="dashboard-analise">
+      <div class="box box-kpi kpi-horas">
+        <h4>Horas ativas:</h4><br>
+        <h5 id="kpiHoras"></h5>
+      </div>
+      <div class="box box-kpi kpi-custo">
+        <h4>Custo total:</h4><br>
+        <h5 id="kpiCusto"></h5>
+      </div>
+      <div class="box box-kpi kpi-custo-media">
+        <h4>Media custo:</h4><br>
+        <h5 id="kpiCustoMedia"></h5>
+      </div>
+      <div class="grafico-processador grafico box">
+        <div class="header">
+          <h3>Custos por dia</h3>
+          <div class="dir">
+            <a style="background-color: #13b348; color: white; border-radius: 4px; height: 45px; align-items: center; justify-content: center; display: flex; width: 160px;"
+              href="https://us-east-1.console.aws.amazon.com/console/home?region=us-east-1#" class="logo">Alterar
+              instância </a>
+          </div>
+        </div>
+        <div class="main-grafico">
+          <canvas id="graficoCusto"></canvas>
+        </div>
+      </div>
+      <div class="box info-maquina">
+        <h3>Sobre a máquina</h3>
+        <div id="sobreMaquina"></div>
+        <br>
+        <h3>Sobre o funcionário</h3>
+        <div id="sobreFuncionario"></div>
+      </div>
+    </section>
+  </main>
+</body>
+
+</html>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="../script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/regression/2.0.1/regression.js"
+  integrity="sha512-PHHRPMxJK1xGYLQPv9FoDbCF2X23Ao1lMAD52oLY9TBW033s4zwIXl5JQBGlfI2iOx3W1qP3LAS/MMv5Ttj0aQ=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+  nomeGerente.innerHTML = sessionStorage.NOME_USUARIO;
+  nome_gerente.innerHTML = sessionStorage.NOME_USUARIO;
+
+  const parametrosString = window.location.search;
+  const parametros = new URLSearchParams(parametrosString);
+  const idMaquina = Number(parametros.get("idMaquina"));
+
+
+
+  fetch(`/medidas/pegarRegistroFuncionario?idMaquina=${idMaquina}`).then(
+    function (res) {
+      if (res.ok) {
+        res.json().then((resposta) => {
+          sobreFuncionario.innerHTML += `<p><b>Nome: </b>${resposta[0].nome}</p>`;
+          sobreFuncionario.innerHTML += `<p><b>Cargo: </b>${resposta[0].cargo}</p>`;
+          sobreFuncionario.innerHTML += `<p><b>E-mail: </b>${resposta[0].email}</p>`;
+        });
+      }
+    }
+  );
+
+  fetch(`/maquinas/pegarKpis?idMaquina=${idMaquina}&dataInicio=${moment().subtract(30, "days").format("YYYY-MM-DD")}&dataFinal=${moment().format("YYYY-MM-DD")}`)
+    .then((res) => {
+      if (res.ok) {
+        res.json().then((resposta) => {
+          var mediaProc = resposta[0].mediaProcessador + "%";
+          var mediaRAM = resposta[0].mediaRAM + "%";
+
+
+
+          fetch(`/grossizinho/pegarRegistroInstancia?idMaquina=${idMaquina}`).then((res) => {
+            if (res.ok) {
+              res.json().then((resposta) => {
+
+                var preco = resposta.map((object) => object.preco);
+                console.log(preco)
+                console.log(resposta);
+
+                document.getElementById(
+                  "sobreMaquina"
+                ).innerHTML += `<p><b>Sistema operacional: </b><span>${resposta[0].sistemaOperacional}</span></p>`;
+                document.getElementById(
+                  "sobreMaquina"
+                ).innerHTML += `<p><b>Tipo da instância: </b><span>${resposta[0].nomeInstancia}</span></p>`;
+                document.getElementById(
+                  "sobreMaquina"
+                ).innerHTML += `<p><b>Custo por hora: </b><span>$${resposta[0].preco.toFixed(4)} USD</span></p>`;
+                document.getElementById(
+                  "sobreMaquina"
+                ).innerHTML += `<p><b>Performance em rede: </b><span>${resposta[0].performaceRede}</span></p>`;
+                document.getElementById(
+                  "sobreMaquina"
+                ).innerHTML += `<p><b>Armazenamento: </b><span>${resposta[0].tipoArmazenamento}</span></p>`;
+                document.getElementById(
+                  "sobreMaquina"
+                ).innerHTML += `<p><b>Média Ram: </b><span>${mediaRAM}</span></p>`;
+                document.getElementById(
+                  "sobreMaquina"
+                ).innerHTML += `<p><b>Média Processador: </b><span>${mediaProc}</span></p>`;
+
+                fetch(`/maquinas/pegarTempo?idMaquina=${idMaquina}&dataInicio=${moment().subtract(30, "days").format("YYYY-MM-DD")}&dataFinal=${moment().format("YYYY-MM-DD")}`)
+                  .then((res) => {
+                    if (res.ok) {
+                      res.json().then((resposta) => {
+                        let horariosDiferenca = [];
+
+                        resposta.forEach(item => {
+                          if (item.dataSaida != null) {
+                            let horarioEntrada = moment(item.dataEntrada).utc();
+                            let horarioSaida = moment(item.dataSaida).utc();
+                            horariosDiferenca.push(horarioSaida.diff(horarioEntrada));
+                          }
+                        });
+
+                        let horasAtivas = 0;
+                        horariosDiferenca.forEach(horario => {
+                          horasAtivas += horario;
+                        });
+
+                        let horas = moment.duration(horasAtivas).hours();
+                        let minutos = moment.duration(horasAtivas).minutes();
+
+
+
+                        kpiCusto.innerHTML = ` $${(preco * (horas + (minutos / 60))).toFixed(4)} USD`;
+
+                        fetch(`/grossizinho/entradaEsaida?idMaquina=${idMaquina}`).then(
+                          function (res) {
+                            if (res.ok) {
+                              res.json().then((cronos) => {
+
+                                console.log(cronos)
+                                var labelData = [];
+                                var dataTempo = [];
+                                var custoDia = [];
+
+                          
+
+                                for (let c = 0; c < cronos.length; c++) {
+                                  labelData.push(moment(cronos[c].Data).utc(0).format("DD/MM/YYYY"));
+                                  dataTempo.push(((cronos[c].Tempo) / 60));
+                                }
+
+                                for (let t = 0; t < dataTempo.length; t++) {
+                                  custoDia.push(dataTempo[t] * preco)
+
+                                }
+
+                                kpiCustoMedia.innerHTML= ` $${((preco * (horas + (minutos / 60)))/dataTempo.length).toFixed(4)} USD`
+
+                                const labels = labelData;
+                                const data = {
+                                  labels: labels,
+                                  datasets: [
+                                    {
+                                      label: 'Dataset 1',
+                                      data: custoDia,
+                                      borderColor: 'rgb(75, 192, 192)',
+                                      backgroundColor: 'rgb(75, 192, 192)',
+                                      stack: 'combined',
+                                      type: 'bar',
+                                    },
+                                    {
+                                      label: 'Dataset 2',
+                                      data: custoDia,
+                                      borderColor: 'rgb(75, 192, 192)',
+                                      backgroundColor: 'rgb(75, 192, 192)',
+                                      stack: 'combined'
+                                    }
+                                  ]
+                                };
+
+                                const config = {
+                                  type: 'line',
+                                  data: data,
+                                  options: {
+                                    plugins: {
+                                      title: {
+                                        display: false,
+                                      },
+                                      legend: {
+                                        display: false,
+                                      }
+                                    },
+                                    scales: {
+                                      y: {
+                                        stacked: true
+                                      }
+                                    }
+                                  },
+                                  // legend: {
+                                  //   display: false
+                                  // }
+                                };
+
+                                window.graficoCusto = new Chart(
+                                  document.getElementById('graficoCusto').getContext("2d"),
+                                  config);
+
+
+
+
+
+
+                              });
+                            }
+                          }
+                        );
+
+                      });
+                    }
+                  })
+                  .catch((erro) => {
+                    console.log(erro);
+                  });
+
+              });
+            }
+          });
+        });
+      }
+    })
+    .catch((erro) => {
+      console.log("Erro ao acessar /maquinas/pegarKpis");
+      console.log(erro);
+    });
+
+  fetch(`/maquinas/pegarTempo?idMaquina=${idMaquina}&dataInicio=${moment().subtract(30, "days").format("YYYY-MM-DD")}&dataFinal=${moment().format("YYYY-MM-DD")}`)
+    .then((res) => {
+      if (res.ok) {
+        res.json().then((resposta) => {
+          let horariosDiferenca = [];
+
+          resposta.forEach(item => {
+            if (item.dataSaida != null) {
+              let horarioEntrada = moment(item.dataEntrada).utc();
+              let horarioSaida = moment(item.dataSaida).utc();
+              horariosDiferenca.push(horarioSaida.diff(horarioEntrada));
+            }
+          });
+
+          let horasAtivas = 0;
+          horariosDiferenca.forEach(horario => {
+            horasAtivas += horario;
+          });
+
+          let horas = moment.duration(horasAtivas).hours();
+          let minutos = moment.duration(horasAtivas).minutes();
+
+          if (horas == 1) {
+            kpiHoras.innerHTML += horas;
+            kpiHoras.innerHTML += " hora e "
+          }
+          else if (horas > 1) {
+            kpiHoras.innerHTML += horas;
+            kpiHoras.innerHTML += " horas e "
+          }
+
+          if (minutos == 1) {
+            kpiHoras.innerHTML += minutos;
+            kpiHoras.innerHTML += " minuto"
+          }
+          else if (minutos > 1) {
+            kpiHoras.innerHTML += minutos;
+            kpiHoras.innerHTML += " minutos"
+          }
+        });
+      }
+    })
+    .catch((erro) => {
+      console.log(erro);
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+<script src="./jsDash/script-dash.js"></script>

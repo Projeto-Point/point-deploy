@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastrar funcionarios | Point</title>
+    <link rel="stylesheet" href="css/styleDashCadaFunc.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <nav id="menu">
+        <a href="maquinas.html" class="logo">
+            <img src="../assets/imgs/Point.png">
+        </a>
+        <hr>
+        <a href="funcionarios.html" class="img-nav">
+            <img src="../assets/imgs/user.png" >
+            <span>Funcionários</span>
+        </a>
+        <a href="maquinas.html" class="img-nav">
+            <img src="./assets/imgs/imac.png">
+            <span>Máquinas</span>
+        </a>
+        <a href="instancias.html" class="img-nav">
+            <img src="assets/dash/server.png">
+            <span>Instâncias</span>
+        </a>
+        <a href="alertas.html" class="img-nav">
+            <img src="assets/dash/alertas.png">
+            <span>Alertas</span>
+        </a>
+        <a href="localizacao.html?filtroMapa=geral" class="img-nav">
+            <img src="assets/imgs/pin.png">
+            <span>Localização</span>
+        </a>
+        <a href="configuracoes.html" class="img-nav">
+            <img src="./assets/imgs/setting.png">
+            <span>Configurações</span>
+        </a>
+        <hr>
+        <a class="img-nav" id="sair">
+            <img src="../assets/imgs/x.png" />
+            <span>Sair</span>
+        </a>
+      </nav>
+      <nav id="menu-mobile"><img src="assets/dash/bars.svg" /></nav>
+    </header>
+    <main>
+      <section class="funcionarios">
+        <section class="top">
+          <div class="top-esq">
+            <a href="funcionarios.html" class="btn-link">Voltar</a>
+          </div>
+          <div class="top-meio">
+            <input
+              id="inp-pesquisar-funcionario"
+              type="search"
+              placeholder="Pesquise por funcionário"
+              style="display: none;"
+            />
+          </div>
+          <div class="top-dir">
+            <p class="nome"><span id="nomeGerente"></span></p>
+            <img src="../assets/dash/icons8-user-64.png" />
+          </div>
+        </section>
+
+        <section class="under">
+          <section class="cad_func">
+            <div class="titulo">
+              <h1>Cadastrar Funcionário</h1>
+            </div>
+
+            <div class="formulario">
+              <div class="box_cad">
+                <div class="inputs">
+                  <span class="span_text">Nome:</span> <br />
+                  <input
+                    class="input"
+                    id="nome_input"
+                    placeholder="Nome"
+                    value="Cleber Machado"
+                  />
+                </div>
+
+                <div class="inputs">
+                  <span class="span_text">E-mail:</span> <br />
+                  <input
+                    class="input"
+                    type="email"
+                    id="email_input"
+                    placeholder="seuEmail@email.com"
+                    value="cleber@point.com"
+                  />
+                </div>
+                <div class="inputs">
+                  <span class="span_text">CPF:</span> <br />
+                  <input
+                    class="input"
+                    id="cpf_input"
+                    placeholder="Somente números"
+                    maxlength="11"
+                    value="12345678902"
+                  />
+                </div>
+
+                <div class="inputs">
+                  <span class="span_text">Cargo:</span> <br />
+                  <input
+                    class="input"
+                    id="cargo_input"
+                    placeholder="Seu cargo"
+                    value="Desenvolvedor Júnior"
+                  />
+                </div>
+              </div>
+              <div class="linha"></div>
+              <div class="box_cad">
+                <div class="inputs">
+                  <span class="span_text">Telefone:</span> <br />
+                  <input
+                    class="input"
+                    id="tel_input"
+                    placeholder="(11) 9999-99999"
+                    maxlength="11"
+                    value="11912345679"
+                  />
+                </div>
+
+                <div class="inputs">
+                  <span class="span_text">Senha:</span> <br />
+                  <input
+                    class="input"
+                    type="password"
+                    id="senha_input"
+                    placeholder="********"
+                    value="1234"
+                  />
+                </div>
+
+                <div class="inputs">
+                  <span class="span_text">Confirme a senha:</span> <br />
+                  <input
+                    class="input"
+                    type="password"
+                    id="confirmacao_senha_input"
+                    placeholder="********"
+                    value="1234"
+                  />
+                </div>
+
+                <div class="botao_cadastro">
+                  <button class="custom-btn btnEntrar" onclick="cadastrar()">
+                    Cadastrar
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="loader">
+              <svg
+                version="1.1"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                x="0px"
+                y="0px"
+                width="40px"
+                height="40px"
+                viewBox="0 0 50 50"
+                style="enable-background: new 0 0 50 50"
+                xml:space="preserve"
+              >
+                <path
+                  fill="#000"
+                  d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z"
+                >
+                  <animateTransform
+                    attributeType="xml"
+                    attributeName="transform"
+                    type="rotate"
+                    from="0 25 25"
+                    to="360 25 25"
+                    dur="0.6s"
+                    repeatCount="indefinite"
+                  />
+                </path>
+              </svg>
+            </div>
+          </section>
+        </section>
+      </section>
+    </main>
+
+    <script>
+      nomeGerente.innerHTML = sessionStorage.NOME_USUARIO;
+      function cadastrar() {
+
+       
+
+        var nomeFuncVar = nome_input.value;
+        var emailVar = email_input.value;
+        var cargoVar = cargo_input.value;
+        var telVar = tel_input.value;
+        var cpfVar = cpf_input.value;
+        var senhaVar = senha_input.value;
+        var confirmacaoSenhaVar = confirmacao_senha_input.value;
+
+        var idEmpresa = sessionStorage.ID_EMPRESA;
+        var idGestor = sessionStorage.ID_USUARIO;
+
+        if (nomeFuncVar == "" || emailVar == "" || senhaVar == "" || confirmacaoSenhaVar == "" || cpfVar == "" || telVar == "") {
+            alert("Preencha todos os campos para prosseguir!");
+            return false;
+        }
+        if (emailVar.indexOf("@") == -1) {
+            alert("E-mail inválido! Verifique e tente novamente.");
+            return false;
+        } else if (cpfVar != Number(cpfVar)) {
+            alert("CPF deve conter apenas números.");
+            return false;
+        } else if (cpfVar.length != 11) {
+            alert("CPF deve conter 11 dígitos.");
+            return false;
+        } else if (senhaVar != confirmacaoSenhaVar) {
+            alert("As senhas inseridas devem ser iguais para prosseguir!");
+            return false;
+        }else if (telVar.length != 11 || telVar != Number(telVar)) {
+            alert("Telefone deve conter 11 digitos e apenas números.");
+            return false;
+        }else{
+          
+          document.querySelector(".loader").style.display = "block";  
+          //fetch do gestor
+          fetch("/usuarios/cadastrarFuncionario", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              // crie um atributo que recebe o valor recuperado aqui
+              // Agora vá para o arquivo routes/usuario.js
+              nomeFuncServer: nomeFuncVar,
+              cpfServer: cpfVar,
+              emailServer: emailVar,
+              senhaServer: senhaVar,
+              cargoServer: cargoVar,
+              telServer: telVar,
+              idGestorServer: idGestor,
+              idEmpresaServer: idEmpresa,
+            }),
+          })
+            .then(function (resposta) {
+              console.log("resposta: ", resposta);
+  
+              if (resposta.ok) {
+                setTimeout(() => {
+                  window.location = "funcionarios.html";
+                }, 1800);
+  
+                limparFormulario();
+              } else {
+                alert("Não foi possível realizar o cadastro");
+                document.querySelector(".loader").style.display = "none";  
+                throw "Houve um erro ao tentar realizar o cadastro!";
+              }
+            })
+            .catch(function (resposta) {
+              console.log(`#ERRO: ${resposta}`);
+            });
+        }
+      }
+    </script>
+  </body>
+</html>
+<script src="./jsDash/script-dash.js"></script>

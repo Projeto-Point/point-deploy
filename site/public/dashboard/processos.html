@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> Proceso | Point</title>
+  <link rel="stylesheet" href="css/styleDashProcesso.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <nav id="menu">
+      <a href="maquinas.html" class="logo">
+        <img src="../assets/imgs/Point.png">
+      </a>
+      <hr>
+      <a href="funcionarios.html" class="img-nav">
+        <img src="../assets/imgs/user.png">
+        <span>Funcionários</span>
+      </a>
+      <a href="maquinas.html" class="img-nav">
+        <img src="./assets/imgs/imac.png">
+        <span>Máquinas</span>
+      </a>
+      <a href="instancias.html" class="img-nav">
+        <img src="assets/dash/server.png">
+        <span>Instâncias</span>
+      </a>
+      <a href="alertas.html" class="img-nav">
+        <img src="assets/dash/alertas.png">
+        <span>Alertas</span>
+      </a>
+      <a href="localizacao.html?filtroMapa=geral" class="img-nav">
+        <img src="assets/imgs/pin.png">
+        <span>Localização</span>
+      </a>
+      <a href="configuracoes.html" class="img-nav">
+        <img src="./assets/imgs/setting.png">
+        <span>Configurações</span>
+      </a>
+      <hr>
+      <a class="img-nav" id="sair">
+        <img src="../assets/imgs/x.png" />
+        <span>Sair</span>
+      </a>
+    </nav>
+    <nav id="menu-mobile"><img src="assets/dash/bars.svg" /></nav>
+  </header>
+  <main>
+    <section class="top">
+      <div class="top-esq">
+        <p class="titulo">Olá, <span id="nome_gerente"></span></p>
+        <p class="subtitulo">17/10/2022</p>
+      </div>
+      <div class="top-meio" style="visibility: hidden">
+        <input id="inp-pesquisar-funcionario" type="search" placeholder="Pesquise o nome de um funcionário..." />
+      </div>
+      <div class="top-dir">
+        <p class="nome"><span id="nomeGerente"></span></p>
+        <img src="../assets/dash/icons8-user-64.png" />
+      </div>
+    </section>
+    <section class="dashboard-analise">
+
+      <div class="grafico-processador grafico box">
+
+        <div class="main-grafico">
+          <h3>Sobre os processos </h3> <br>
+
+          <div id="sobreProcesso" style="height:50vh ;">
+          </div>
+        </div>
+      </div>
+
+      <div id="wordcloud">
+        <img src="../assets/imgs/wordcloud-processo2.png" alt="" width="100%">
+      </div>
+      <div class="box info-maquina">
+        <h3>Sobre a máquina</h3>
+
+        <div id="sobreMaquina"></div>
+        <br>
+        <h3>Sobre o funcionário</h3>
+        <div id="sobreFuncionario"></div>
+      </div>
+    </section>
+  </main>
+</body>
+
+</html>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="../script.js"></script>
+<script>
+  nomeGerente.innerHTML = sessionStorage.NOME_USUARIO;
+  nome_gerente.innerHTML = sessionStorage.NOME_USUARIO;
+
+  const parametrosString = window.location.search;
+  const parametros = new URLSearchParams(parametrosString);
+  const idMaquina = Number(parametros.get("idMaquina"));
+
+  fetch(`/medidas/pegarRegistroMaquina?idMaquina=${idMaquina}`).then((res) => {
+    if (res.ok) {
+      res.json().then((resposta) => {
+        document.getElementById(
+          "sobreMaquina"
+        ).innerHTML += `<p><b>Sistema operacional: </b><span>${resposta[0].sistemaOperacional}</span></p>`;
+        document.getElementById(
+          "sobreMaquina"
+        ).innerHTML += `<p><b>Nome da máquina: </b><span>${resposta[0].nomeMaquina}</span></p>`;
+        document.getElementById(
+          "sobreMaquina"
+        ).innerHTML += `<p><b>Tipo da máquina: </b><span>${resposta[0].tipoMaquina}</span></p>`;
+
+
+        for (let index = 0; index < resposta.length; index++) {
+          if (resposta[index].atributo == "CORE") {
+            resposta[index].unidadeMedida = "";
+            resposta[index].valor *= 1;
+            Math.trunc(resposta[index].valor);
+          }
+          if (resposta[index].atributo == "THREADS") {
+            resposta[index].unidadeMedida = "";
+            resposta[index].valor *= 1;
+            Math.trunc(resposta[index].valor);
+          }
+          document.getElementById(
+            "sobreMaquina"
+          ).innerHTML += `<p><b>${resposta[index].tipoComponente} - ${resposta[index].atributo}: </b><span>${resposta[index].valor} ${resposta[index].unidadeMedida}</span></p>`;
+        }
+      });
+    }
+  });
+
+
+
+  fetch(`/medidas/pegarRegistroFuncionario?idMaquina=${idMaquina}`).then(
+    function (res) {
+      if (res.ok) {
+        res.json().then((resposta) => {
+          sobreFuncionario.innerHTML += `<p><b>Nome: </b>${resposta[0].nome}</p>`;
+          sobreFuncionario.innerHTML += `<p><b>Cargo: </b>${resposta[0].cargo}</p>`;
+          sobreFuncionario.innerHTML += `<p><b>E-mail: </b>${resposta[0].email}</p>`;
+          sobreFuncionario.innerHTML += `<p><b>Telefone: </b>${resposta[0].telefone}</p>`;
+        });
+      }
+    }
+  );
+
+  fetch(`/gabriel/listarProcessos?idMaquina=${idMaquina}`).then(
+    function (res) {
+      if (res.ok) {
+        res.json().then((resposta) => {
+          console.log(resposta)
+
+          var id = resposta.map((object) => object.idProcesso);
+          var nomeProcesso = resposta.map((object) => object.nome);
+          var porcentagem = resposta.map((object) => object.porcentagemCpu);
+          var pid = resposta.map((object) => object.pid);
+
+          for (let j = 0; j < resposta.length; j++) {
+            sobreProcesso.innerHTML += `
+            <b><div id="idProcesso">IdProcesso: </b>${id[j]}</div> <br> 
+            <b><div id="nomeProcessos">Nome: </b>${nomeProcesso[j]}</div><br>
+            <b><div id="porcentagemProcesso">Porcentagem da CPU: </b>${porcentagem[j]}</div><br>
+            <b><div id="Pidprocesso">Pid: </b>${pid[j]}</div> <br>
+    ------------------------------------------------------------------------------------------        
+`
+
+          }
+
+
+
+        });
+      }
+    }
+  );
+</script>
+<script src="./jsDash/script-dash.js"></script>

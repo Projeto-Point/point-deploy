@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alterar funcionário | Point</title>
+    <link rel="stylesheet" href="css/styleDashAlterFunc.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <header>
+
+
+        <nav id="menu">
+            <a href="maquinas.html" class="logo">
+                <img src="../assets/imgs/Point.png">
+            </a>
+            <hr>
+            <a href="funcionarios.html" class="img-nav">
+                <img src="../assets/imgs/user.png" >
+                <span>Funcionários</span>
+            </a>
+            <a href="maquinas.html" class="img-nav">
+                <img src="./assets/imgs/imac.png">
+                <span>Máquinas</span>
+            </a>
+            <a href="instancias.html" class="img-nav">
+                <img src="assets/dash/server.png">
+                <span>Instâncias</span>
+            </a>
+            <a href="alertas.html" class="img-nav">
+                <img src="assets/dash/alertas.png">
+                <span>Alertas</span>
+            </a>
+            <a href="localizacao.html?filtroMapa=geral" class="img-nav">
+                <img src="assets/imgs/pin.png">
+                <span>Localização</span>
+            </a>
+            <a href="configuracoes.html" class="img-nav">
+                <img src="./assets/imgs/setting.png">
+                <span>Configurações</span>
+            </a>
+            <hr>
+            <a class="img-nav" id="sair">
+                <img src="../assets/imgs/x.png" />
+                <span>Sair</span>
+            </a>
+        </nav>
+        <nav id="menu-mobile"><img src="assets/dash/bars.svg" /></nav>
+    </header>
+    <main>
+        <section class="funcionarios">
+            <section class="top">
+                <div class="top-esq">
+                    <a href="funcionarios.html" class="btn-link">Voltar</a>
+                </div>
+                <div class="top-meio" style="visibility: hidden;">
+                    <input id="inp-pesquisar-funcionario" type="search" placeholder="Pesquise por funcionário" />
+                </div>
+                <div class="top-dir">
+                    <p class="nome"><span id="nomeGerente"></span></p>
+                    <img src="../assets/dash/icons8-user-64.png">
+                </div>
+            </section>
+
+            <section class="under">
+                <section class="cad_func">
+                    <div class="titulo">
+                        <h1>Alterar Funcionário</h1>
+                        <button onclick="removerFuncionario()">Remover</button>
+                    </div>
+
+                    <div class="formulario">
+                        <div class="box_cad">
+                            <div class="inputs">
+                                <span class="span_text">Nome atual:</span> <br />
+                                <div class="atual"><span id="nome_atual"></span></div>
+                            </div>
+
+                            <div class="inputs">
+                                <span class="span_text">Senha atual:</span> <br />
+                                <div class="atual"><span id="senha_atual"></span></div>
+                            </div>
+                            <div class="inputs">
+                                <span class="span_text">Telefone atual:</span> <br />
+                                <div class="atual"><span id="tel_atual"></span></div>
+                            </div>
+
+                            <div class="inputs">
+                                <span class="span_text">Cargo atual:</span> <br />
+                                <div class="atual"><span id="cargo_atual"></span></div>
+                            </div>
+                        </div>
+                        <div class="linha"></div>
+                        <div class="box_cad">
+                            <div class="inputs">
+                                <span class="span_text">Novo Nome:</span> <br />
+                                <input class="input" id="newNome_input" placeholder="Insira seu novo nome" />
+                            </div>
+
+                            <div class="inputs">
+                                <span class="span_text">Nova Senha:</span> <br />
+                                <input class="input" type="password" id="newSenha_input" placeholder="********" />
+                            </div>
+
+                            <div class="inputs">
+                                <span class="span_text">Novo Telefone:</span> <br />
+                                <input class="input" type="" id="newTel_input" placeholder="(11) 9999-99999"
+                                    maxlength="11" />
+                            </div>
+
+                            <div class="inputs">
+                                <span class="span_text">Novo cargo:</span> <br />
+                                <input class="input" type="" id="newCargo_input" placeholder="Insira seu novo cargo" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inputs">
+                        <span class="span_text">Senha gerente:</span> <br />
+                        <input class="input_senhaGerente" type="password" id="senhaGerente_input"
+                            placeholder="Senha do gerente" />
+                    </div>
+
+                    <div class="botao_cadastro">
+                        <button class="custom-btn btnEntrar" onclick="alterar()">
+                            Alterar
+                        </button>
+                    </div>
+
+                    <div class="loader">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            x="0px" y="0px" width="40px" height="40px" viewBox="0 0 50 50"
+                            style="enable-background:new 0 0 50 50;" xml:space="preserve">
+                            <path fill="#000"
+                                d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+                                <animateTransform attributeType="xml" attributeName="transform" type="rotate"
+                                    from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite" />
+                            </path>
+                        </svg>
+                    </div>
+                </section>
+            </section>
+        </section>
+    </main>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="../script.js"></script>
+    <script>
+        nomeGerente.innerHTML = sessionStorage.NOME_USUARIO;
+
+        var idFuncionario;
+        var senhaGestor;
+
+        const parametrosString = window.location.search;
+        const parametros = new URLSearchParams(parametrosString);
+        idFuncionario = Number(parametros.get("idFuncionario"));
+
+        dadosAtuais();
+
+        function getSenhaGestor() {
+            fetch(`/usuarios/getSenhaGestor?idFuncionario=${sessionStorage.ID_USUARIO}`).then(
+                function (res) {
+                    if (res.ok) {
+                        res.json().then((senha) => {
+                            senhaGestor = senha[0].senha
+                            return true;
+                        });
+                    }
+                }
+            );
+        }
+
+        console.log(getSenhaGestor());
+
+        function alterar() {
+
+            var nomeFuncVar = newNome_input.value;
+            var cargoVar = newCargo_input.value;
+            var telVar = newTel_input.value;
+            var senhaVar = newSenha_input.value;
+            var idFuncionarioVar = idFuncionario;
+            var senhaGerente = senhaGerente_input.value;
+
+            // Validaçõoes Padrão
+            if (nomeFuncVar == "" || senhaVar == "" || telVar == "" || cargoVar == "") {
+                alert("Preencha todos os campos para prosseguir!");
+                return false;
+            } else if (telVar.length != 11) {
+                alert("Telefone deve conter 11 digitos e apenas números.");
+                return false;
+            } else if (senhaGerente != senhaGestor) {
+                alert("Senha do Gestor não é válida")
+                return false;
+            } else {
+                document.querySelector(".loader").style.display = "block";
+
+                fetch(`/usuarios/alterarFuncionario?idFuncionario=${idFuncionario}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        // crie um atributo que recebe o valor recuperado aqui
+                        // Agora vá para o arquivo routes/usuario.js
+                        nomeFuncServer: nomeFuncVar,
+                        senhaServer: senhaVar,
+                        cargoServer: cargoVar,
+                        telServer: telVar,
+                        idFuncionarioServer: idFuncionarioVar,
+                    }),
+                })
+                    .then(function (resposta) {
+                        console.log("resposta: ", resposta);
+
+                        if (resposta.ok) {
+                            setTimeout(() => {
+                                console.log("entrou");
+                                window.location = "funcionarios.html";
+                            }, 1000);
+
+                            limparFormulario();
+                        } else {
+                            alert("Não foi possível mudar as informações");
+                            throw "Houve um erro ao tentar realizar o cadastro!";
+                        }
+                    })
+                    .catch(function (resposta) {
+                        console.log(`#ERRO: ${resposta}`);
+                    });
+
+            }
+        }
+
+        function dadosAtuais() {
+            fetch(`/usuarios/pegarDadosAtuais?idFuncionario=${idFuncionario}`).then(
+                function (res) {
+                    if (res.ok) {
+                        res.json().then((RegistroFuncionario) => {
+                            console.log(RegistroFuncionario);
+
+                            nome_atual.innerHTML = RegistroFuncionario[0].nome;
+                            senha_atual.innerHTML = RegistroFuncionario[0].senha;
+                            tel_atual.innerHTML = RegistroFuncionario[0].telefone;
+                            cargo_atual.innerHTML = RegistroFuncionario[0].cargo;
+                        });
+                    }
+                }
+            );
+        }
+
+
+
+        async function removerFuncionario(){
+
+
+
+            senhaGerente = document.getElementById('senhaGerente_input').value;
+
+            // Tem que fazer
+            if(senhaGerente == ''){
+                alert("Você precisa colocar sua senha para remover o funcionário");
+
+            }else if(senhaGestor != senhaGerente){
+                alert('Senha inválida');
+            }else{
+
+                fetch(`/usuarios/removerFuncionario?idFuncionario=${idFuncionario}`).then(
+
+                function(res){
+                    console.log(res)
+                    if(res.ok){
+
+                        document.querySelector(".loader").style.display = "block";
+                        // mostrar a animação
+                        setTimeout(() =>{
+                            window.location = './funcionarios.html'
+                        }, 2000)
+                    }else{
+                        alert('Não foi possível remover o usuário.')
+                    }
+
+                    }   
+                )
+            }
+
+        }
+    </script>
+</body>
+
+</html>
+<script src="./jsDash/script-dash.js"></script>
