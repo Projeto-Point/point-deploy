@@ -889,8 +889,7 @@ svg rect {
 
 #graficoBytesRecebidos{
   display: flex;
-  width: 368px;
-  height: 240px;
+  width: 415px;
 }
 
 @media screen and (max-width: 1200px) {
